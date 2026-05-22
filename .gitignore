@@ -17,11 +17,6 @@ node_modules/
 .env.local
 *.env.*
 
-# Build outputs
-dist/
-build/
-target/
-
 # Python
 __pycache__/
 *.pyc
@@ -31,23 +26,31 @@ __pycache__/
 env/
 venv/
 .venv/
-.ENV
-.pipenv
-.pytest_cache/
-.mypy_cache/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
 .coverage
-htmlcov/
-
-# Node.js
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# OS generated files
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git/modules/
 .DS_Store
 Thumbs.db
 
-# Compression
+# Build artifacts
+dist/
+build/
+*.out
+*.exe
+*.dll
+*.so
+*.a
+*.obj
+
+# Compressed files
 *.zip
 *.gz
 *.tar
@@ -70,4 +73,20 @@ Thumbs.db
 *.tar.bz2
 *.tar.xz
 *.tar.zst
+
+# Coverage
+coverage/
+htmlcov/
+
+# MyPy
+.mypy_cache/
+
+# PyTest
+.pytest_cache/
+
+# Gradle
+.gradle/
+
+# Target
+target/
 ```

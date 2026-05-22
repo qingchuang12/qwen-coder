@@ -1,184 +1,367 @@
 // sidebar.js
 let sites = [];
+let currentIndex = -1;
 
-// 初始化
+// Initialize
 document.addEventListener('DOMContentLoaded', async () => {
-  await loadSites();
-  renderSiteList();
-  // 自动打开第一个网站
-  if (sites.length > 0) {
-    setTimeout(() => openInNewTab(0), 300);
-  }
+    console.log('DOM loaded, initializing...');
+    
+    // Load sites from storage
+    await loadSites();
+    
+    // Setup all event listeners
+    setupEventListeners();
+    
+    // Render dropdown and manage panel
+    renderDropdown();
+    renderManagePanel();
+    
+    // Load the first site (or last visited)
+    if (sites.length > 0) {
+        // Try to get last visited site index
+        chrome.storage.sync.get(['lastVisitedIndex'], (result) => {
+            let idx = result.lastVisitedIndex;
+            if (idx === undefined || idx < 0 || idx >= sites.length) {
+                idx = 0;
+            }
+            currentIndex = idx;
+            document.getElementById('siteSelect').value = sites[currentIndex].url;
+            loadSiteInIframe(currentIndex);
+        });
+    } else {
+        showError('No sites configured. Click "Manage" to add sites.');
+    }
 });
 
-async function loadSites() {
-  return new Promise((resolve) => {
-    chrome.storage.sync.get(['sites'], (result) => {
-      sites = result.sites || [
-        { name: 'DeepSeek Chat', url: 'https://chat.deepseek.com/' },
-        { name: 'Qwen Coder', url: 'https://coder.qwen.ai/' }
-      ];
-      resolve();
-    });
-  });
-}
-
-async function saveSites() {
-  return new Promise((resolve) => {
-    chrome.storage.sync.set({ sites }, resolve);
-  });
-}
-
-function renderSiteList() {
-  const siteList = document.getElementById('siteList');
-  siteList.innerHTML = '';
-
-  if (sites.length === 0) {
-    siteList.innerHTML = `
-      <div class="empty-state">
-        <p>No sites yet.</p>
-        <p>Click "Add New Site" to get started!</p>
-      </div>
-    `;
-    return;
-  }
-
-  sites.forEach((site, index) => {
-    const card = document.createElement('div');
-    card.className = 'site-card';
-
-    // 获取网站的首字母作为图标
-    const initial = site.name.charAt(0).toUpperCase();
-
-    card.innerHTML = `
-      <div class="site-header">
-        <div class="site-icon">${initial}</div>
-        <div class="site-info">
-          <div class="site-name">${escapeHtml(site.name)}</div>
-          <div class="site-url">${escapeHtml(site.url)}</div>
-        </div>
-      </div>
-      <div class="site-actions-row">
-        <button class="btn btn-view" id="viewBtn-${index}">👁️ View</button>
-        <button class="btn btn-newtab" id="newTabBtn-${index}">🚀 New Tab</button>
-        <button class="btn btn-edit" id="editBtn-${index}">✏️ Edit</button>
-        <button class="btn btn-delete" id="deleteBtn-${index}">🗑️ Delete</button>
-      </div>
-    `;
-
-    siteList.appendChild(card);
-  });
-
-  // 为所有按钮添加事件监听器 - 使用 setTimeout 确保 DOM 已渲染
-  setTimeout(() => {
-    sites.forEach((site, index) => {
-      const viewBtn = document.getElementById(`viewBtn-${index}`);
-      const newTabBtn = document.getElementById(`newTabBtn-${index}`);
-      const editBtn = document.getElementById(`editBtn-${index}`);
-      const deleteBtn = document.getElementById(`deleteBtn-${index}`);
-
-      console.log(`Setting up listeners for site ${index}:`, { viewBtn, newTabBtn, editBtn, deleteBtn });
-
-      if (viewBtn) viewBtn.addEventListener('click', () => { console.log('View clicked'); viewSite(index); });
-      if (newTabBtn) newTabBtn.addEventListener('click', () => { console.log('NewTab clicked'); openInNewTab(index); });
-      if (editBtn) editBtn.addEventListener('click', () => { console.log('Edit clicked'); editSite(index); });
-      if (deleteBtn) deleteBtn.addEventListener('click', () => { console.log('Delete clicked'); deleteSite(index); });
-    });
-  }, 100);
-}
-
-// 在新标签页打开网站（主要功能）
-function openInNewTab(index) {
-  console.log('openInNewTab called with index:', index);
-  if (index < 0 || index >= sites.length) {
-    console.error('Invalid index:', index);
-    return;
-  }
-  const site = sites[index];
-  console.log('Opening site:', site);
-  chrome.runtime.sendMessage({
-    action: 'openUrl',
-    url: site.url
-  }, (response) => {
-    if (chrome.runtime.lastError) {
-      console.error('Message send error:', chrome.runtime.lastError);
-    } else {
-      console.log('Response:', response);
+// Setup all event listeners
+function setupEventListeners() {
+    // Dropdown change
+    const siteSelect = document.getElementById('siteSelect');
+    if (siteSelect) {
+        siteSelect.addEventListener('change', (e) => {
+            const url = e.target.value;
+            const idx = sites.findIndex(s => s.url === url);
+            if (idx !== -1) {
+                currentIndex = idx;
+                loadSiteInIframe(currentIndex);
+                // Save last visited
+                chrome.storage.sync.set({ lastVisitedIndex: currentIndex });
+            }
+        });
     }
-  });
+    
+    // New Tab button
+    const btnNewTab = document.getElementById('btnNewTab');
+    if (btnNewTab) {
+        btnNewTab.addEventListener('click', () => {
+            if (currentIndex >= 0 && currentIndex < sites.length) {
+                openInNewTab(currentIndex);
+            }
+        });
+    }
+    
+    // Manage button
+    const btnManage = document.getElementById('btnManage');
+    if (btnManage) {
+        btnManage.addEventListener('click', toggleManagePanel);
+    }
+    
+    // Close manage panel button
+    const btnCloseManage = document.getElementById('btnCloseManage');
+    if (btnCloseManage) {
+        btnCloseManage.addEventListener('click', () => {
+            document.getElementById('managePanel').classList.remove('visible');
+        });
+    }
+    
+    // Add site button
+    const btnAddSite = document.getElementById('btnAddSite');
+    if (btnAddSite) {
+        btnAddSite.addEventListener('click', openAddModal);
+    }
+    
+    // Open external button (when iframe blocked)
+    const btnOpenExternal = document.getElementById('btnOpenExternal');
+    if (btnOpenExternal) {
+        btnOpenExternal.addEventListener('click', () => {
+            if (currentIndex >= 0 && currentIndex < sites.length) {
+                openInNewTab(currentIndex);
+            }
+        });
+    }
+    
+    // Modal cancel button
+    const btnCancel = document.getElementById('btnCancel');
+    if (btnCancel) {
+        btnCancel.addEventListener('click', closeModal);
+    }
+    
+    // Modal save button
+    const btnSave = document.getElementById('btnSave');
+    if (btnSave) {
+        btnSave.addEventListener('click', saveSite);
+    }
 }
 
-// 查看网站（同样在新标签页打开）
-function viewSite(index) {
-  openInNewTab(index);
+// Load sites from storage
+async function loadSites() {
+    return new Promise((resolve) => {
+        chrome.storage.sync.get(['sites'], (result) => {
+            sites = result.sites || [
+                { name: 'DeepSeek Chat', url: 'https://chat.deepseek.com/' },
+                { name: 'Qwen Coder', url: 'https://coder.qwen.ai/' }
+            ];
+            resolve();
+        });
+    });
 }
 
+// Save sites to storage
+async function saveSites() {
+    return new Promise((resolve) => {
+        chrome.storage.sync.set({ sites }, resolve);
+    });
+}
+
+// Render dropdown
+function renderDropdown() {
+    const select = document.getElementById('siteSelect');
+    if (!select) return;
+    
+    select.innerHTML = '';
+    sites.forEach((site, index) => {
+        const option = document.createElement('option');
+        option.value = site.url;
+        option.textContent = site.name;
+        select.appendChild(option);
+    });
+}
+
+// Render manage panel list
+function renderManagePanel() {
+    const siteList = document.getElementById('siteList');
+    if (!siteList) return;
+    
+    siteList.innerHTML = '';
+    
+    if (sites.length === 0) {
+        siteList.innerHTML = '<div style="text-align:center;color:#666;padding:20px;">No sites yet.</div>';
+        return;
+    }
+    
+    sites.forEach((site, index) => {
+        const item = document.createElement('div');
+        item.className = 'site-item';
+        if (index === currentIndex) {
+            item.classList.add('active');
+        }
+        
+        const initial = site.name.charAt(0).toUpperCase();
+        
+        item.innerHTML = `
+            <div class="site-item-icon">${initial}</div>
+            <div class="site-item-info">
+                <div class="site-item-name">${escapeHtml(site.name)}</div>
+                <div class="site-item-url">${escapeHtml(site.url)}</div>
+            </div>
+            <div class="site-item-actions">
+                <button class="btn-icon btn-icon-edit" data-index="${index}" title="Edit">✏️</button>
+                <button class="btn-icon btn-icon-delete" data-index="${index}" title="Delete">🗑️</button>
+            </div>
+        `;
+        
+        siteList.appendChild(item);
+    });
+    
+    // Add click listeners for edit/delete buttons
+    setTimeout(() => {
+        siteList.querySelectorAll('.btn-icon-edit').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const idx = parseInt(e.target.dataset.index);
+                editSite(idx);
+            });
+        });
+        
+        siteList.querySelectorAll('.btn-icon-delete').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const idx = parseInt(e.target.dataset.index);
+                deleteSite(idx);
+            });
+        });
+    }, 50);
+}
+
+// Toggle manage panel visibility
+function toggleManagePanel() {
+    const panel = document.getElementById('managePanel');
+    panel.classList.toggle('visible');
+    if (panel.classList.contains('visible')) {
+        renderManagePanel();
+    }
+}
+
+// Load site in iframe
+function loadSiteInIframe(index) {
+    if (index < 0 || index >= sites.length) return;
+    
+    const site = sites[index];
+    const iframe = document.getElementById('siteIframe');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const errorState = document.getElementById('errorState');
+    
+    // Show loading, hide error
+    loadingOverlay.classList.remove('hidden');
+    errorState.classList.remove('visible');
+    
+    // Set iframe src
+    iframe.src = site.url;
+    
+    // Update dropdown selection
+    document.getElementById('siteSelect').value = site.url;
+    
+    // Handle iframe load
+    iframe.onload = () => {
+        loadingOverlay.classList.add('hidden');
+        // Note: We can't detect X-Frame-Options errors directly
+        // The error will show as a blank page or browser error
+    };
+    
+    iframe.onerror = () => {
+        loadingOverlay.classList.add('hidden');
+        showError('Failed to load the website.');
+    };
+    
+    // Show error state after timeout if still loading (likely blocked)
+    setTimeout(() => {
+        if (!loadingOverlay.classList.contains('hidden')) {
+            loadingOverlay.classList.add('hidden');
+            showError('This website blocks embedding in iframes.');
+        }
+    }, 3000);
+}
+
+// Show error state
+function showError(message) {
+    const errorState = document.getElementById('errorState');
+    const errorMessage = document.getElementById('errorMessage');
+    if (errorState && errorMessage) {
+        errorMessage.textContent = message;
+        errorState.classList.add('visible');
+    }
+}
+
+// Open in new tab
+function openInNewTab(index) {
+    if (index < 0 || index >= sites.length) return;
+    
+    const site = sites[index];
+    chrome.runtime.sendMessage({
+        action: 'openUrl',
+        url: site.url
+    }, (response) => {
+        if (chrome.runtime.lastError) {
+            console.error('Message send error:', chrome.runtime.lastError);
+        }
+    });
+}
+
+// Edit site
 function editSite(index) {
-  console.log('editSite called with index:', index);
-  const site = sites[index];
-  document.getElementById('modalTitle').textContent = 'Edit Site';
-  document.getElementById('siteName').value = site.name;
-  document.getElementById('siteUrl').value = site.url;
-  document.getElementById('siteId').value = index;
-  document.getElementById('modalOverlay').classList.add('active');
+    const site = sites[index];
+    document.getElementById('modalTitle').textContent = 'Edit Site';
+    document.getElementById('siteName').value = site.name;
+    document.getElementById('siteUrl').value = site.url;
+    document.getElementById('siteId').value = index.toString();
+    document.getElementById('modalOverlay').classList.add('active');
 }
 
+// Delete site
 function deleteSite(index) {
-  console.log('deleteSite called with index:', index);
-  if (confirm(`Are you sure you want to delete "${sites[index].name}"?`)) {
-    sites.splice(index, 1);
-    saveSites();
-    renderSiteList();
-  }
+    if (confirm(`Are you sure you want to delete "${sites[index].name}"?`)) {
+        sites.splice(index, 1);
+        
+        // Adjust current index if needed
+        if (index === currentIndex) {
+            currentIndex = Math.min(currentIndex, sites.length - 1);
+        } else if (index < currentIndex) {
+            currentIndex--;
+        }
+        
+        saveSites();
+        renderDropdown();
+        renderManagePanel();
+        
+        // Reload current site if we still have sites
+        if (sites.length > 0 && currentIndex >= 0) {
+            document.getElementById('siteSelect').value = sites[currentIndex].url;
+            loadSiteInIframe(currentIndex);
+        } else {
+            showError('No sites remaining. Add a new site to continue.');
+        }
+    }
 }
 
+// Open add modal
 function openAddModal() {
-  console.log('openAddModal called');
-  document.getElementById('modalTitle').textContent = 'Add New Site';
-  document.getElementById('siteName').value = '';
-  document.getElementById('siteUrl').value = '';
-  document.getElementById('siteId').value = '-1';
-  document.getElementById('modalOverlay').classList.add('active');
+    document.getElementById('modalTitle').textContent = 'Add New Site';
+    document.getElementById('siteName').value = '';
+    document.getElementById('siteUrl').value = '';
+    document.getElementById('siteId').value = '-1';
+    document.getElementById('modalOverlay').classList.add('active');
 }
 
+// Close modal
 function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('active');
+    document.getElementById('modalOverlay').classList.remove('active');
 }
 
+// Save site (add or edit)
 function saveSite() {
-  const name = document.getElementById('siteName').value.trim();
-  let url = document.getElementById('siteUrl').value.trim();
-  const siteId = parseInt(document.getElementById('siteId').value);
-
-  if (!name) {
-    alert('Please enter a site name');
-    return;
-  }
-
-  if (!url) {
-    alert('Please enter a URL');
-    return;
-  }
-
-  if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    url = 'https://' + url;
-  }
-
-  if (siteId === -1) {
-    // Add new site
-    sites.push({ name, url });
-  } else {
-    // Edit existing site
-    sites[siteId] = { name, url };
-  }
-
-  saveSites();
-  closeModal();
-  renderSiteList();
+    const name = document.getElementById('siteName').value.trim();
+    let url = document.getElementById('siteUrl').value.trim();
+    const siteIdStr = document.getElementById('siteId').value;
+    const siteId = parseInt(siteIdStr, 10);
+    
+    if (!name) {
+        alert('Please enter a site name');
+        return;
+    }
+    
+    if (!url) {
+        alert('Please enter a URL');
+        return;
+    }
+    
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://' + url;
+    }
+    
+    if (isNaN(siteId) || siteId === -1) {
+        // Add new site
+        sites.push({ name, url });
+    } else {
+        // Edit existing site
+        sites[siteId] = { name, url };
+    }
+    
+    saveSites();
+    closeModal();
+    renderDropdown();
+    renderManagePanel();
+    
+    // If this is a new site and it's the first one, load it
+    if (sites.length === 1) {
+        currentIndex = 0;
+        document.getElementById('siteSelect').value = sites[0].url;
+        loadSiteInIframe(0);
+    }
 }
 
+// Escape HTML
 function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }

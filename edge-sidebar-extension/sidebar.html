@@ -17,106 +17,43 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
+        /* Top Header with Dropdown */
         .header {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: white;
-            padding: 15px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .content-container {
-            flex: 1;
+            padding: 12px 15px;
             display: flex;
-            flex-direction: column;
-            padding: 15px;
-            overflow-y: auto;
-        }
-
-        .site-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        .site-card {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 2px solid transparent;
-            display: flex;
-            flex-direction: column;
+            align-items: center;
             gap: 10px;
-        }
-
-        .site-card:hover {
-            border-color: #4a90d9;
-            box-shadow: 0 4px 12px rgba(74, 144, 217, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .site-card.active {
-            border-color: #4a90d9;
-            background: #e8f4fc;
-        }
-
-        .site-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .site-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
             flex-shrink: 0;
         }
 
-        .site-info {
+        .header label {
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .site-dropdown {
             flex: 1;
-            min-width: 0;
-        }
-
-        .site-name {
-            font-weight: 600;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
             color: #333;
-            font-size: 15px;
-            margin-bottom: 3px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            cursor: pointer;
+            min-width: 150px;
         }
 
-        .site-url {
-            color: #888;
-            font-size: 12px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .site-dropdown:focus {
+            outline: 2px solid #4a90d9;
         }
 
-        .site-actions-row {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
+        .action-btn {
             padding: 8px 12px;
             border: none;
             border-radius: 6px;
@@ -124,28 +61,12 @@
             font-size: 13px;
             font-weight: 500;
             transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .btn-view {
-            background: linear-gradient(135deg, #4a90d9 0%, #3a7bc8 100%);
-            color: white;
-            flex: 1;
-            justify-content: center;
-        }
-
-        .btn-view:hover {
-            box-shadow: 0 3px 8px rgba(74, 144, 217, 0.3);
-            transform: translateY(-1px);
+            white-space: nowrap;
         }
 
         .btn-newtab {
             background: linear-gradient(135deg, #27ae60 0%, #219a52 100%);
             color: white;
-            flex: 1;
-            justify-content: center;
         }
 
         .btn-newtab:hover {
@@ -153,46 +74,287 @@
             transform: translateY(-1px);
         }
 
-        .btn-edit {
+        .btn-manage {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+        }
+
+        .btn-manage:hover {
+            box-shadow: 0 3px 8px rgba(243, 156, 18, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* Main Content Area with Iframe */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .iframe-container {
+            flex: 1;
+            position: relative;
+            background: white;
+        }
+
+        .site-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .loading-overlay.hidden {
+            display: none;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e0e0e0;
+            border-top-color: #4a90d9;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Error/Blocked State */
+        .error-state {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+            z-index: 20;
+        }
+
+        .error-state.visible {
+            display: flex;
+        }
+
+        .error-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .error-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .error-message {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .btn-open-external {
+            background: linear-gradient(135deg, #4a90d9 0%, #3a7bc8 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-open-external:hover {
+            box-shadow: 0 4px 12px rgba(74, 144, 217, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* Manage Panel (collapsible) */
+        .manage-panel {
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            padding: 15px;
+            flex-shrink: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .manage-panel.visible {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .manage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .manage-header h3 {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .btn-close-manage {
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .site-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .site-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border: 2px solid transparent;
+        }
+
+        .site-item.active {
+            border-color: #4a90d9;
+            background: #e8f4fc;
+        }
+
+        .site-item-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .site-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .site-item-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .site-item-url {
+            font-size: 12px;
+            color: #888;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .site-item-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-icon-edit {
             background: #f39c12;
             color: white;
         }
 
-        .btn-edit:hover {
+        .btn-icon-edit:hover {
             background: #e67e22;
         }
 
-        .btn-delete {
+        .btn-icon-delete {
             background: #e74c3c;
             color: white;
         }
 
-        .btn-delete:hover {
+        .btn-icon-delete:hover {
             background: #c0392b;
         }
 
-        .add-site-btn {
+        .btn-add-site {
             background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
             color: white;
             border: none;
-            padding: 14px 20px;
-            border-radius: 10px;
+            padding: 12px 20px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             width: 100%;
-            transition: all 0.2s;
+            margin-top: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
 
-        .add-site-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(52, 152, 219, 0.3);
+        .btn-add-site:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
         }
 
+        /* Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -284,34 +446,46 @@
         .btn-save:hover {
             background: #3a7bc8;
         }
-
-        .empty-state {
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-            color: #666;
-        }
-
-        .empty-state p {
-            font-size: 14px;
-            line-height: 1.6;
-        }
     </style>
 </head>
 <body>
+    <!-- Top Header with Dropdown -->
     <div class="header">
-        <h1>🤖 AI Chat Sites</h1>
+        <label for="siteSelect">Site:</label>
+        <select class="site-dropdown" id="siteSelect"></select>
+        <button class="action-btn btn-newtab" id="btnNewTab" title="Open in new tab">🚀 New Tab</button>
+        <button class="action-btn btn-manage" id="btnManage" title="Manage sites">⚙️ Manage</button>
     </div>
 
-    <div class="content-container">
-        <div class="site-list" id="siteList">
-            <!-- Sites will be rendered here -->
+    <!-- Main Content Area -->
+    <div class="content-area">
+        <div class="iframe-container">
+            <div class="loading-overlay" id="loadingOverlay">
+                <div class="spinner"></div>
+                <div class="loading-text">Loading...</div>
+            </div>
+            <iframe class="site-iframe" id="siteIframe" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+            <div class="error-state" id="errorState">
+                <div class="error-icon">🚫</div>
+                <div class="error-title">Unable to display in sidebar</div>
+                <div class="error-message" id="errorMessage">This website blocks embedding in iframes.</div>
+                <button class="btn-open-external" id="btnOpenExternal">
+                    🔗 Open in New Tab
+                </button>
+            </div>
         </div>
 
-        <button class="add-site-btn" onclick="openAddModal()">
-            <span>➕</span> Add New Site
-        </button>
+        <!-- Manage Panel -->
+        <div class="manage-panel" id="managePanel">
+            <div class="manage-header">
+                <h3>Manage Sites</h3>
+                <button class="btn-close-manage" id="btnCloseManage">×</button>
+            </div>
+            <div class="site-list" id="siteList"></div>
+            <button class="btn-add-site" id="btnAddSite">
+                <span>➕</span> Add New Site
+            </button>
+        </div>
     </div>
 
     <!-- Add/Edit Modal -->
@@ -328,8 +502,8 @@
             </div>
             <input type="hidden" id="siteId">
             <div class="modal-actions">
-                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-                <button class="btn-save" onclick="saveSite()">Save</button>
+                <button class="btn-cancel" id="btnCancel">Cancel</button>
+                <button class="btn-save" id="btnSave">Save</button>
             </div>
         </div>
     </div>
