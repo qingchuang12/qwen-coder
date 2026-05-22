@@ -5,11 +5,14 @@
 ## 功能特点
 
 - ✅ 默认集成 DeepSeek Chat 和 Qwen Coder
-- ✅ 在 Edge 侧边栏中打开网站
+- ✅ **点击扩展图标自动打开侧边栏并加载第一个网站**
+- ✅ **顶部下拉菜单快速切换网站**
+- ✅ **底部管理区域增删改网站**
 - ✅ 自定义添加/删除网站
 - ✅ 自定义网站显示名称
 - ✅ 数据同步（使用 Chrome Storage Sync）
 - ✅ 简洁美观的界面
+- ✅ 记住上次使用的网站
 
 ## 安装步骤
 
@@ -33,7 +36,7 @@
 5. **使用扩展**
    - 点击浏览器工具栏中的扩展图标
    - 或在任意页面右键选择"Open AI Chat Sidebar"
-   - 侧边栏将在右侧打开
+   - 侧边栏将在右侧打开，自动加载第一个网站
 
 ### 方法二：打包成 .crx 文件安装
 
@@ -47,25 +50,36 @@
 ### 打开侧边栏
 - 点击浏览器工具栏中的扩展图标
 - 或在网页上右键 → 选择 "Open AI Chat Sidebar"
+- **侧边栏打开时会自动加载列表中的第一个网站**
+
+### 切换网站
+- **使用顶部的下拉菜单快速切换不同网站**
+- 选择后网站会立即在侧边栏的 iframe 中加载
 
 ### 添加新网站
-1. 点击 "+ Add New Site" 按钮
+1. 在底部管理区域点击 "+ Add New Site" 按钮
 2. 输入网站名称（如：ChatGPT）
 3. 输入网站 URL（如：https://chat.openai.com/）
 4. 点击 "Save" 保存
+5. 新网站会自动添加到下拉菜单中
 
 ### 编辑网站
-1. 点击网站卡片上的 "Edit" 按钮
+1. 在底部管理区域点击网站的 "Edit" 按钮
 2. 修改名称或 URL
 3. 点击 "Save" 保存
 
 ### 删除网站
-1. 点击网站卡片上的 "Delete" 按钮
+1. 在底部管理区域点击网站的 "Delete" 按钮
 2. 确认删除
+3. 如果删除的是当前网站，会自动切换到其他网站
 
-### 访问网站
-- 点击任意网站卡片即可在新标签页中打开该网站
-- 由于安全限制（X-Frame-Options/CSP），网站会在新标签页而非侧边栏内打开
+### 快速选择网站
+- 点击底部管理区域中的任意网站卡片，可快速选择并加载该网站
+- 当前选中的网站会高亮显示
+
+### 网站无法在侧边栏显示？
+- 某些网站由于安全策略（X-Frame-Options/CSP）不允许在 iframe 中嵌入
+- 此时会显示提示遮罩层，点击 "Open in New Tab" 按钮可在新标签页打开
 
 ## 文件结构
 
@@ -92,14 +106,15 @@ edge-sidebar-extension/
 
 ## 注意事项
 
-- 某些网站可能不允许在 iframe 中嵌入（X-Frame-Options 限制）
+- 某些网站可能不允许在 iframe 中嵌入（X-Frame-Options 限制），此时会显示提示并提供在新标签页打开的选项
 - 数据通过 Chrome Storage Sync 同步，需要登录 Microsoft 账户
 - 首次加载可能需要授权侧边栏权限
+- 扩展会记住你上次使用的网站，下次打开时自动加载
 
 ## 技术栈
 
 - Manifest V3
-- Chrome Extension APIs (sidePanel, storage, contextMenus)
+- Chrome Extension APIs (sidePanel, storage, contextMenus, tabs)
 - Vanilla JavaScript
 - HTML5 & CSS3
 

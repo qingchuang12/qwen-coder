@@ -22,80 +22,186 @@
         .header {
             background: #1a1a2e;
             color: white;
-            padding: 15px;
-            text-align: center;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .header h1 {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .site-selector {
+            flex: 1;
+            padding: 8px 10px;
+            border: none;
+            border-radius: 6px;
+            background: white;
+            color: #333;
+            font-size: 13px;
+            cursor: pointer;
+            min-width: 0;
+        }
+        
+        .site-selector:focus {
+            outline: 2px solid #4a90d9;
+            outline-offset: 1px;
+        }
+        
+        .iframe-container {
+            flex: 1;
+            position: relative;
+            background: white;
+        }
+        
+        .site-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .frame-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            z-index: 100;
+        }
+        
+        .frame-overlay.active {
+            display: flex;
+        }
+        
+        .frame-overlay h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .frame-overlay p {
+            margin-bottom: 15px;
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        
+        .btn-open-new {
+            background: #4a90d9;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        
+        .btn-open-new:hover {
+            background: #3a7bc8;
+        }
+        
+        .manage-section {
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            padding: 10px;
+            max-height: 40%;
+            overflow-y: auto;
+        }
+        
+        .manage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .manage-header h2 {
+            font-size: 14px;
+            color: #333;
         }
         
         .site-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
         
         .site-item {
-            background: white;
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 10px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: background 0.2s;
+            border: 1px solid #e0e0e0;
         }
         
         .site-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            background: #e8f4fc;
+            border-color: #4a90d9;
+        }
+        
+        .site-item.active {
+            background: #e8f4fc;
+            border-color: #4a90d9;
         }
         
         .site-info {
             flex: 1;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            min-width: 0;
         }
         
         .site-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
             background: #e0e0e0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 12px;
+            flex-shrink: 0;
         }
         
         .site-name {
             font-weight: 500;
             color: #333;
-            font-size: 14px;
-        }
-        
-        .site-url {
-            font-size: 11px;
-            color: #888;
-            margin-top: 2px;
+            font-size: 13px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         .site-actions {
             display: flex;
-            gap: 5px;
+            gap: 4px;
+            flex-shrink: 0;
         }
         
         .btn {
-            padding: 6px 10px;
+            padding: 4px 8px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
             transition: background 0.2s;
         }
         
@@ -121,13 +227,13 @@
             background: #27ae60;
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
+            padding: 8px 15px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 500;
-            margin: 10px;
-            width: calc(100% - 20px);
+            width: 100%;
+            margin-top: 10px;
             transition: background 0.2s;
         }
         
@@ -224,28 +330,34 @@
         .btn-save:hover {
             background: #3a7bc8;
         }
-        
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #888;
-        }
-        
-        .empty-state p {
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🤖 AI Chat Sites</h1>
+        <h1>🤖 AI Chat</h1>
+        <select class="site-selector" id="siteSelector" onchange="switchSite()">
+            <!-- Sites will be populated here -->
+        </select>
     </div>
     
-    <div class="site-list" id="siteList">
-        <!-- Sites will be rendered here -->
+    <div class="iframe-container">
+        <iframe id="siteFrame" class="site-frame" src=""></iframe>
+        <div class="frame-overlay" id="frameOverlay">
+            <h3>Unable to display in sidebar</h3>
+            <p>This website blocks embedding in iframes. Click below to open it in a new tab.</p>
+            <button class="btn-open-new" onclick="openCurrentInNewTab()">Open in New Tab</button>
+        </div>
     </div>
     
-    <button class="add-site-btn" onclick="openAddModal()">+ Add New Site</button>
+    <div class="manage-section">
+        <div class="manage-header">
+            <h2>Manage Sites</h2>
+        </div>
+        <div class="site-list" id="siteList">
+            <!-- Sites will be rendered here -->
+        </div>
+        <button class="add-site-btn" onclick="openAddModal()">+ Add New Site</button>
+    </div>
     
     <!-- Add/Edit Modal -->
     <div class="modal-overlay" id="modalOverlay">
