@@ -1,127 +1,94 @@
-# AI Chat Sidebar - Edge Extension
+# Edge Sidebar Extension - AI Chat Launcher
 
-一个 Microsoft Edge 侧边栏插件，可以快速访问 AI 聊天网站，支持自定义增删网站和自定义显示名称。
+一个 Edge 浏览器侧边栏扩展，用于快速访问和管理 AI 聊天网站。
 
 ## 功能特点
 
-- ✅ 默认集成 DeepSeek Chat 和 Qwen Coder
-- ✅ **点击扩展图标自动打开侧边栏并加载第一个网站**
-- ✅ **顶部下拉菜单快速切换网站**
-- ✅ **底部管理区域增删改网站**
-- ✅ 自定义添加/删除网站
-- ✅ 自定义网站显示名称
-- ✅ 数据同步（使用 Chrome Storage Sync）
-- ✅ 简洁美观的界面
-- ✅ 记住上次使用的网站
+- 🚀 **快速启动** - 点击扩展图标打开侧边栏，一键在新标签页中打开选中的网站
+- 📋 **下拉切换** - 通过顶部下拉菜单快速切换不同网站
+- ➕ **自定义管理** - 添加、编辑、删除任意网站
+- 💾 **自动同步** - 数据通过 Chrome Storage Sync 自动同步
+- 🔖 **记忆功能** - 记住上次使用的网站，下次自动选中
+- 🎨 **精美界面** - 现代化的卡片式设计，支持 hover 和选中效果
 
-## 安装步骤
+## 默认网站
 
-### 方法一：开发者模式加载（推荐用于测试）
+- DeepSeek Chat (https://chat.deepseek.com/)
+- Qwen Coder (https://coder.qwen.ai/)
 
-1. **下载扩展文件**
-   - 克隆或下载此项目到本地
+## 安装方法
 
-2. **打开 Edge 扩展管理页面**
-   - 在 Edge 浏览器中访问：`edge://extensions/`
-   - 或者点击菜单 → 扩展 → 管理扩展
-
-3. **启用开发者模式**
-   - 打开左侧的"开发人员模式"开关
-
-4. **加载扩展**
-   - 点击"加载解压缩的扩展"
-   - 选择 `edge-sidebar-extension` 文件夹
-   - 扩展将立即安装并启用
-
-5. **使用扩展**
-   - 点击浏览器工具栏中的扩展图标
-   - 或在任意页面右键选择"Open AI Chat Sidebar"
-   - 侧边栏将在右侧打开，自动加载第一个网站
-
-### 方法二：打包成 .crx 文件安装
-
-1. 在 Edge 扩展管理页面 (`edge://extensions/`)
-2. 点击"打包扩展"
-3. 选择 `edge-sidebar-extension` 文件夹
-4. 生成 `.crx` 文件后拖入浏览器安装
+1. 打开 Edge 浏览器，访问 `edge://extensions/`
+2. 开启右上角的"开发人员模式"
+3. 点击"加载解压缩的扩展"
+4. 选择本项目的文件夹 `/workspace/edge-sidebar-extension`
+5. 扩展图标将出现在浏览器工具栏中
 
 ## 使用方法
 
 ### 打开侧边栏
 - 点击浏览器工具栏中的扩展图标
-- 或在网页上右键 → 选择 "Open AI Chat Sidebar"
-- **侧边栏打开时会自动加载列表中的第一个网站**
 
-### 切换网站
-- **使用顶部的下拉菜单快速切换不同网站**
-- 选择后网站会立即在侧边栏的 iframe 中加载
+### 选择网站
+- 使用顶部的下拉菜单选择要访问的网站
+- 或者点击下方的网站卡片进行选择（选中状态会高亮显示）
 
-### 添加新网站
-1. 在底部管理区域点击 "+ Add New Site" 按钮
-2. 输入网站名称（如：ChatGPT）
-3. 输入网站 URL（如：https://chat.openai.com/）
-4. 点击 "Save" 保存
-5. 新网站会自动添加到下拉菜单中
+### 打开网站
+- 点击底部的 "🚀 Open Selected Site" 按钮
+- 网站将在新标签页中打开（由于大多数网站禁止在 iframe 中嵌入）
 
-### 编辑网站
-1. 在底部管理区域点击网站的 "Edit" 按钮
+### 管理网站
+
+#### 添加网站
+1. 点击 "+ Add New Site" 按钮
+2. 输入网站名称和 URL
+3. 点击 "Save" 保存
+
+#### 编辑网站
+1. 点击网站卡片右侧的 "Edit" 按钮
 2. 修改名称或 URL
 3. 点击 "Save" 保存
 
-### 删除网站
-1. 在底部管理区域点击网站的 "Delete" 按钮
+#### 删除网站
+1. 点击网站卡片右侧的 "Delete" 按钮
 2. 确认删除
-3. 如果删除的是当前网站，会自动切换到其他网站
 
-### 快速选择网站
-- 点击底部管理区域中的任意网站卡片，可快速选择并加载该网站
-- 当前选中的网站会高亮显示
+## 技术说明
 
-### 网站无法在侧边栏显示？
-- 某些网站由于安全策略（X-Frame-Options/CSP）不允许在 iframe 中嵌入
-- 此时会显示提示遮罩层，点击 "Open in New Tab" 按钮可在新标签页打开
+### 为什么网站在新标签页打开？
+
+大多数现代网站（包括 DeepSeek、Qwen 等）都设置了 `X-Frame-Options` 或 `Content-Security-Policy` 头部，禁止网站被嵌入到 iframe 中。这是为了防止点击劫持等安全攻击。
+
+因此，本扩展采用在新标签页中打开网站的方式，确保所有网站都能正常访问。
+
+### 权限说明
+
+- `sidePanel` - 显示侧边栏面板
+- `storage` - 存储用户配置的网站列表
+- `tabs` - 在新标签页中打开网站
+- `notifications` - 显示错误通知
 
 ## 文件结构
 
 ```
 edge-sidebar-extension/
 ├── manifest.json      # 扩展配置文件
-├── background.js      # 后台服务脚本
-├── sidebar.html       # 侧边栏页面
+├── background.js      # 后台脚本，处理侧边栏打开和 URL 跳转
+├── sidebar.html       # 侧边栏 UI 界面
 ├── sidebar.js         # 侧边栏逻辑
-├── icons/             # 图标文件
+├── icons/             # 扩展图标
 │   ├── icon16.svg
 │   ├── icon48.svg
 │   └── icon128.svg
 └── README.md          # 说明文档
 ```
 
-## 自定义图标
+## 开发调试
 
-如果需要替换图标：
-1. 准备 PNG 格式的图标（16x16, 48x48, 128x128）
-2. 放入 `icons/` 文件夹
-3. 修改 `manifest.json` 中的图标路径
-4. 重新加载扩展
-
-## 注意事项
-
-- 某些网站可能不允许在 iframe 中嵌入（X-Frame-Options 限制），此时会显示提示并提供在新标签页打开的选项
-- 数据通过 Chrome Storage Sync 同步，需要登录 Microsoft 账户
-- 首次加载可能需要授权侧边栏权限
-- 扩展会记住你上次使用的网站，下次打开时自动加载
-
-## 技术栈
-
-- Manifest V3
-- Chrome Extension APIs (sidePanel, storage, contextMenus, tabs)
-- Vanilla JavaScript
-- HTML5 & CSS3
+1. 在 `edge://extensions/` 页面找到已加载的扩展
+2. 点击 "检查视图 - background page" 打开开发者工具
+3. 查看 Console 中的日志输出
 
 ## 许可证
 
 MIT License
-
-## 贡献
-
-欢迎提交 Issue 和 Pull Request！

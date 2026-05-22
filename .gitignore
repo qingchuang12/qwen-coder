@@ -1,1 +1,2 @@
-Nothing should be ignored in this case, as the changes only include source files (.html, .js) and a documentation file (.md), with no build artifacts, dependencies, or temporary files present.
+# Examples 1:
+(empty — output nothing)

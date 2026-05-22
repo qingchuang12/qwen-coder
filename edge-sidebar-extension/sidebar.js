@@ -1,293 +1,201 @@
-// Default sites configuration
-const defaultSites = [
-    {
-        id: 'deepseek',
-        name: 'DeepSeek Chat',
-        url: 'https://chat.deepseek.com/'
-    },
-    {
-        id: 'qwen',
-        name: 'Qwen Coder',
-        url: 'https://coder.qwen.ai/'
-    }
-];
+// sidebar.js
+let sites = [];
+let currentSiteIndex = -1;
 
-// Current active site index
-let currentSiteIndex = 0;
-let allSites = [];
-
-// Load sites from storage or use defaults
-async function loadSites() {
-    return new Promise((resolve) => {
-        chrome.storage.sync.get(['sites'], (result) => {
-            if (result.sites && result.sites.length > 0) {
-                resolve(result.sites);
-            } else {
-                resolve(defaultSites);
-            }
-        });
-    });
-}
-
-// Save sites to storage
-async function saveSitesToStorage(sites) {
-    return new Promise((resolve) => {
-        chrome.storage.sync.set({ sites: sites }, resolve);
-    });
-}
-
-// Get current site index from storage
-async function getCurrentSiteIndex() {
-    return new Promise((resolve) => {
-        chrome.storage.sync.get(['currentSiteIndex'], (result) => {
-            resolve(result.currentSiteIndex !== undefined ? result.currentSiteIndex : 0);
-        });
-    });
-}
-
-// Save current site index to storage
-async function saveCurrentSiteIndex(index) {
-    return new Promise((resolve) => {
-        chrome.storage.sync.set({ currentSiteIndex: index }, resolve);
-    });
-}
-
-// Render the site selector dropdown
-async function renderSiteSelector() {
-    allSites = await loadSites();
-    currentSiteIndex = await getCurrentSiteIndex();
-    
-    // Ensure currentSiteIndex is valid
-    if (currentSiteIndex >= allSites.length) {
-        currentSiteIndex = 0;
-        await saveCurrentSiteIndex(0);
-    }
-    
-    const selectorEl = document.getElementById('siteSelector');
-    
-    if (allSites.length === 0) {
-        selectorEl.innerHTML = '<option value="">No sites added</option>';
-        return;
-    }
-    
-    selectorEl.innerHTML = allSites.map((site, index) => 
-        `<option value="${index}" ${index === currentSiteIndex ? 'selected' : ''}>${escapeHtml(site.name)}</option>`
-    ).join('');
-    
-    // Load the current site in iframe
-    loadCurrentSite();
-}
-
-// Load current site in iframe
-function loadCurrentSite() {
-    if (allSites.length === 0 || currentSiteIndex >= allSites.length) {
-        document.getElementById('siteFrame').src = '';
-        document.getElementById('frameOverlay').classList.remove('active');
-        return;
-    }
-    
-    const site = allSites[currentSiteIndex];
-    const iframe = document.getElementById('siteFrame');
-    const overlay = document.getElementById('frameOverlay');
-    
-    // Set up iframe load listener to detect blocking
-    iframe.onload = () => {
-        // Try to access iframe content - if blocked, show overlay
-        try {
-            iframe.contentWindow.document;
-            // If we can access it, hide overlay
-            overlay.classList.remove('active');
-        } catch (e) {
-            // Cross-origin or blocked, show overlay
-            overlay.classList.add('active');
-        }
-    };
-    
-    iframe.onerror = () => {
-        overlay.classList.add('active');
-    };
-    
-    // Load the site
-    iframe.src = site.url;
-    
-    // Show overlay by default (will be hidden if iframe loads successfully)
-    overlay.classList.add('active');
-    
-    // Update manage list highlighting
-    renderManageList();
-}
-
-// Switch to a different site via dropdown
-function switchSite() {
-    const selector = document.getElementById('siteSelector');
-    currentSiteIndex = parseInt(selector.value, 10);
-    saveCurrentSiteIndex(currentSiteIndex);
-    loadCurrentSite();
-}
-
-// Open current site in new tab
-function openCurrentInNewTab() {
-    if (allSites.length === 0 || currentSiteIndex >= allSites.length) {
-        return;
-    }
-    
-    const site = allSites[currentSiteIndex];
-    chrome.runtime.sendMessage({ type: 'openUrl', url: site.url }, (response) => {
-        if (chrome.runtime.lastError) {
-            window.open(site.url, '_blank');
-        }
-    });
-}
-
-// Render the manage list
-async function renderManageList() {
-    allSites = await loadSites();
-    const siteListEl = document.getElementById('siteList');
-    
-    if (allSites.length === 0) {
-        siteListEl.innerHTML = '<p style="color:#888;font-size:12px;text-align:center;padding:10px;">No sites added yet</p>';
-        return;
-    }
-    
-    siteListEl.innerHTML = allSites.map((site, index) => `
-        <div class="site-item ${index === currentSiteIndex ? 'active' : ''}" onclick="selectAndLoadSite(${index})">
-            <div class="site-info">
-                <div class="site-icon">🌐</div>
-                <div class="site-name">${escapeHtml(site.name)}</div>
-            </div>
-            <div class="site-actions">
-                <button class="btn btn-edit" onclick="event.stopPropagation(); editSite('${site.id}')">Edit</button>
-                <button class="btn btn-delete" onclick="event.stopPropagation(); deleteSite('${site.id}')">Delete</button>
-            </div>
-        </div>
-    `).join('');
-}
-
-// Select and load a site from manage list
-function selectAndLoadSite(index) {
-    currentSiteIndex = index;
-    saveCurrentSiteIndex(currentSiteIndex);
-    
-    // Update dropdown
-    const selector = document.getElementById('siteSelector');
-    selector.value = index;
-    
-    loadCurrentSite();
-}
-
-// Escape HTML to prevent XSS
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-// Open modal for adding new site
-function openAddModal() {
-    document.getElementById('modalTitle').textContent = 'Add New Site';
-    document.getElementById('siteName').value = '';
-    document.getElementById('siteUrl').value = '';
-    document.getElementById('siteId').value = '';
-    document.getElementById('modalOverlay').classList.add('active');
-}
-
-// Edit existing site
-async function editSite(siteId) {
-    const sites = await loadSites();
-    const site = sites.find(s => s.id === siteId);
-    
-    if (site) {
-        document.getElementById('modalTitle').textContent = 'Edit Site';
-        document.getElementById('siteName').value = site.name;
-        document.getElementById('siteUrl').value = site.url;
-        document.getElementById('siteId').value = site.id;
-        document.getElementById('modalOverlay').classList.add('active');
-    }
-}
-
-// Close modal
-function closeModal() {
-    document.getElementById('modalOverlay').classList.remove('active');
-}
-
-// Save site (add or edit)
-async function saveSite() {
-    const name = document.getElementById('siteName').value.trim();
-    const url = document.getElementById('siteUrl').value.trim();
-    const siteId = document.getElementById('siteId').value;
-    
-    if (!name || !url) {
-        alert('Please fill in both fields');
-        return;
-    }
-    
-    // Validate URL
-    try {
-        new URL(url);
-    } catch (e) {
-        alert('Please enter a valid URL');
-        return;
-    }
-    
-    const sites = await loadSites();
-    
-    if (siteId) {
-        // Edit existing site
-        const index = sites.findIndex(s => s.id === siteId);
-        if (index !== -1) {
-            sites[index] = { ...sites[index], name, url };
-            // Update currentSiteIndex if editing current site
-            if (index === currentSiteIndex) {
-                // Refresh to update display
-                await renderSiteSelector();
-            }
-        }
-    } else {
-        // Add new site
-        const newSite = {
-            id: 'site_' + Date.now(),
-            name,
-            url
-        };
-        sites.push(newSite);
-    }
-    
-    await saveSitesToStorage(sites);
-    closeModal();
-    await renderSiteSelector();
-    await renderManageList();
-}
-
-// Delete site
-async function deleteSite(siteId) {
-    if (confirm('Are you sure you want to delete this site?')) {
-        const sites = await loadSites();
-        const deletedIndex = sites.findIndex(s => s.id === siteId);
-        const filteredSites = sites.filter(s => s.id !== siteId);
-        
-        await saveSitesToStorage(filteredSites);
-        
-        // Adjust currentSiteIndex if needed
-        if (deletedIndex !== -1) {
-            if (deletedIndex < currentSiteIndex) {
-                currentSiteIndex--;
-            } else if (deletedIndex === currentSiteIndex) {
-                // If deleting current site, move to previous or first
-                currentSiteIndex = Math.max(0, currentSiteIndex - 1);
-                if (currentSiteIndex >= filteredSites.length) {
-                    currentSiteIndex = 0;
-                }
-            }
-            await saveCurrentSiteIndex(currentSiteIndex);
-        }
-        
-        await renderSiteSelector();
-        await renderManageList();
-    }
-}
-
-// Initialize
+// 初始化
 document.addEventListener('DOMContentLoaded', async () => {
-    await renderSiteSelector();
-    await renderManageList();
+  await loadSites();
+  
+  if (sites.length > 0) {
+    // 恢复上次选择的索引，或默认为第一个
+    const lastUsedIndex = parseInt(localStorage.getItem('lastUsedSiteIndex') || '0');
+    currentSiteIndex = Math.min(lastUsedIndex, sites.length - 1);
+  }
+  
+  renderSiteSelector();
+  renderSiteList();
 });
+
+async function loadSites() {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(['sites'], (result) => {
+      sites = result.sites || [
+        { name: 'DeepSeek Chat', url: 'https://chat.deepseek.com/' },
+        { name: 'Qwen Coder', url: 'https://coder.qwen.ai/' }
+      ];
+      resolve();
+    });
+  });
+}
+
+async function saveSites() {
+  return new Promise((resolve) => {
+    chrome.storage.sync.set({ sites }, resolve);
+  });
+}
+
+function renderSiteSelector() {
+  const siteSelector = document.getElementById('siteSelector');
+  siteSelector.innerHTML = '';
+  
+  if (sites.length === 0) {
+    const option = document.createElement('option');
+    option.textContent = 'No sites';
+    option.disabled = true;
+    siteSelector.appendChild(option);
+    return;
+  }
+
+  sites.forEach((site, index) => {
+    const option = document.createElement('option');
+    option.value = index;
+    option.textContent = site.name;
+    if (index === currentSiteIndex) {
+      option.selected = true;
+    }
+    siteSelector.appendChild(option);
+  });
+  
+  // 监听下拉选择变化
+  siteSelector.addEventListener('change', (e) => {
+    currentSiteIndex = parseInt(e.target.value);
+    localStorage.setItem('lastUsedSiteIndex', currentSiteIndex);
+    renderSiteList();
+  });
+}
+
+function renderSiteList() {
+  const siteList = document.getElementById('siteList');
+  siteList.innerHTML = '';
+  
+  if (sites.length === 0) {
+    siteList.innerHTML = '<div class="info-box"><p>No sites yet. Click "Add New Site" to get started.</p></div>';
+    return;
+  }
+
+  sites.forEach((site, index) => {
+    const card = document.createElement('div');
+    card.className = `site-card ${index === currentSiteIndex ? 'active' : ''}`;
+    card.onclick = (e) => {
+      // 如果点击的是按钮，不切换选择
+      if (e.target.classList.contains('btn')) return;
+      selectSite(index);
+    };
+    
+    // 获取网站的首字母作为图标
+    const initial = site.name.charAt(0).toUpperCase();
+    
+    card.innerHTML = `
+      <div class="site-icon">${initial}</div>
+      <div class="site-info">
+        <div class="site-name">${escapeHtml(site.name)}</div>
+        <div class="site-url">${escapeHtml(site.url)}</div>
+      </div>
+      <div class="site-actions">
+        <button class="btn btn-edit" onclick="editSite(${index})">Edit</button>
+        <button class="btn btn-delete" onclick="deleteSite(${index})">Delete</button>
+      </div>
+    `;
+    
+    siteList.appendChild(card);
+  });
+}
+
+function selectSite(index) {
+  currentSiteIndex = index;
+  localStorage.setItem('lastUsedSiteIndex', index);
+  renderSiteSelector();
+  renderSiteList();
+}
+
+function openSelectedSite() {
+  if (currentSiteIndex === -1 || sites.length === 0) {
+    alert('Please select a site first');
+    return;
+  }
+  const site = sites[currentSiteIndex];
+  chrome.runtime.sendMessage({ 
+    action: 'openUrl', 
+    url: site.url 
+  });
+}
+
+function editSite(index) {
+  const site = sites[index];
+  document.getElementById('modalTitle').textContent = 'Edit Site';
+  document.getElementById('siteName').value = site.name;
+  document.getElementById('siteUrl').value = site.url;
+  document.getElementById('siteId').value = index;
+  document.getElementById('modalOverlay').classList.add('active');
+}
+
+function deleteSite(index) {
+  if (confirm(`Are you sure you want to delete "${sites[index].name}"?`)) {
+    sites.splice(index, 1);
+    
+    if (sites.length === 0) {
+      currentSiteIndex = -1;
+    } else if (index <= currentSiteIndex && currentSiteIndex > 0) {
+      currentSiteIndex--;
+    }
+    
+    localStorage.setItem('lastUsedSiteIndex', currentSiteIndex);
+    saveSites();
+    renderSiteSelector();
+    renderSiteList();
+  }
+}
+
+function openAddModal() {
+  document.getElementById('modalTitle').textContent = 'Add New Site';
+  document.getElementById('siteName').value = '';
+  document.getElementById('siteUrl').value = '';
+  document.getElementById('siteId').value = '-1';
+  document.getElementById('modalOverlay').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+}
+
+function saveSite() {
+  const name = document.getElementById('siteName').value.trim();
+  let url = document.getElementById('siteUrl').value.trim();
+  const siteId = parseInt(document.getElementById('siteId').value);
+  
+  if (!name) {
+    alert('Please enter a site name');
+    return;
+  }
+  
+  if (!url) {
+    alert('Please enter a URL');
+    return;
+  }
+  
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    url = 'https://' + url;
+  }
+  
+  if (siteId === -1) {
+    // Add new site
+    sites.push({ name, url });
+    currentSiteIndex = sites.length - 1;
+  } else {
+    // Edit existing site
+    sites[siteId] = { name, url };
+    currentSiteIndex = siteId;
+  }
+  
+  localStorage.setItem('lastUsedSiteIndex', currentSiteIndex);
+  saveSites();
+  closeModal();
+  renderSiteSelector();
+  renderSiteList();
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
