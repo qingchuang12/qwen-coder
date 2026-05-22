@@ -1,18 +1,9 @@
 // sidebar.js
 let sites = [];
-let currentSiteIndex = -1;
 
 // 初始化
 document.addEventListener('DOMContentLoaded', async () => {
   await loadSites();
-  
-  if (sites.length > 0) {
-    // 恢复上次选择的索引，或默认为第一个
-    const lastUsedIndex = parseInt(localStorage.getItem('lastUsedSiteIndex') || '0');
-    currentSiteIndex = Math.min(lastUsedIndex, sites.length - 1);
-  }
-  
-  renderSiteSelector();
   renderSiteList();
 });
 
@@ -34,66 +25,40 @@ async function saveSites() {
   });
 }
 
-function renderSiteSelector() {
-  const siteSelector = document.getElementById('siteSelector');
-  siteSelector.innerHTML = '';
-  
-  if (sites.length === 0) {
-    const option = document.createElement('option');
-    option.textContent = 'No sites';
-    option.disabled = true;
-    siteSelector.appendChild(option);
-    return;
-  }
-
-  sites.forEach((site, index) => {
-    const option = document.createElement('option');
-    option.value = index;
-    option.textContent = site.name;
-    if (index === currentSiteIndex) {
-      option.selected = true;
-    }
-    siteSelector.appendChild(option);
-  });
-  
-  // 监听下拉选择变化
-  siteSelector.addEventListener('change', (e) => {
-    currentSiteIndex = parseInt(e.target.value);
-    localStorage.setItem('lastUsedSiteIndex', currentSiteIndex);
-    renderSiteList();
-  });
-}
-
 function renderSiteList() {
   const siteList = document.getElementById('siteList');
   siteList.innerHTML = '';
   
   if (sites.length === 0) {
-    siteList.innerHTML = '<div class="info-box"><p>No sites yet. Click "Add New Site" to get started.</p></div>';
+    siteList.innerHTML = `
+      <div class="empty-state">
+        <p>No sites yet.</p>
+        <p>Click "Add New Site" to get started!</p>
+      </div>
+    `;
     return;
   }
 
   sites.forEach((site, index) => {
     const card = document.createElement('div');
-    card.className = `site-card ${index === currentSiteIndex ? 'active' : ''}`;
-    card.onclick = (e) => {
-      // 如果点击的是按钮，不切换选择
-      if (e.target.classList.contains('btn')) return;
-      selectSite(index);
-    };
+    card.className = 'site-card';
     
     // 获取网站的首字母作为图标
     const initial = site.name.charAt(0).toUpperCase();
     
     card.innerHTML = `
-      <div class="site-icon">${initial}</div>
-      <div class="site-info">
-        <div class="site-name">${escapeHtml(site.name)}</div>
-        <div class="site-url">${escapeHtml(site.url)}</div>
+      <div class="site-header">
+        <div class="site-icon">${initial}</div>
+        <div class="site-info">
+          <div class="site-name">${escapeHtml(site.name)}</div>
+          <div class="site-url">${escapeHtml(site.url)}</div>
+        </div>
       </div>
-      <div class="site-actions">
-        <button class="btn btn-edit" onclick="editSite(${index})">Edit</button>
-        <button class="btn btn-delete" onclick="deleteSite(${index})">Delete</button>
+      <div class="site-actions-row">
+        <button class="btn btn-view" onclick="viewSite(${index})">👁️ View</button>
+        <button class="btn btn-newtab" onclick="openInNewTab(${index})">🚀 New Tab</button>
+        <button class="btn btn-edit" onclick="editSite(${index})">✏️ Edit</button>
+        <button class="btn btn-delete" onclick="deleteSite(${index})">🗑️ Delete</button>
       </div>
     `;
     
@@ -101,23 +66,19 @@ function renderSiteList() {
   });
 }
 
-function selectSite(index) {
-  currentSiteIndex = index;
-  localStorage.setItem('lastUsedSiteIndex', index);
-  renderSiteSelector();
-  renderSiteList();
-}
-
-function openSelectedSite() {
-  if (currentSiteIndex === -1 || sites.length === 0) {
-    alert('Please select a site first');
-    return;
-  }
-  const site = sites[currentSiteIndex];
+// 在新标签页打开网站（主要功能）
+function openInNewTab(index) {
+  if (index < 0 || index >= sites.length) return;
+  const site = sites[index];
   chrome.runtime.sendMessage({ 
     action: 'openUrl', 
     url: site.url 
   });
+}
+
+// 查看网站（同样在新标签页打开）
+function viewSite(index) {
+  openInNewTab(index);
 }
 
 function editSite(index) {
@@ -132,16 +93,7 @@ function editSite(index) {
 function deleteSite(index) {
   if (confirm(`Are you sure you want to delete "${sites[index].name}"?`)) {
     sites.splice(index, 1);
-    
-    if (sites.length === 0) {
-      currentSiteIndex = -1;
-    } else if (index <= currentSiteIndex && currentSiteIndex > 0) {
-      currentSiteIndex--;
-    }
-    
-    localStorage.setItem('lastUsedSiteIndex', currentSiteIndex);
     saveSites();
-    renderSiteSelector();
     renderSiteList();
   }
 }
@@ -180,17 +132,13 @@ function saveSite() {
   if (siteId === -1) {
     // Add new site
     sites.push({ name, url });
-    currentSiteIndex = sites.length - 1;
   } else {
     // Edit existing site
     sites[siteId] = { name, url };
-    currentSiteIndex = siteId;
   }
   
-  localStorage.setItem('lastUsedSiteIndex', currentSiteIndex);
   saveSites();
   closeModal();
-  renderSiteSelector();
   renderSiteList();
 }
 

@@ -32,7 +32,6 @@ async function openSidePanel(tabId) {
     try {
         // Ensure side panel is enabled with correct path
         await chrome.sidePanel.setOptions({ 
-            tabId: tabId, 
             path: 'sidebar.html', 
             enabled: true 
         });
@@ -54,12 +53,12 @@ async function openSidePanel(tabId) {
 
 // Listen for messages from sidebar
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.type === 'openUrl') {
+    if (message.action === 'openUrl') {
         // Open the URL in a new tab
         chrome.tabs.create({ url: message.url }, () => {
             sendResponse({ success: true });
         });
         return true; // Keep the message channel open for async response
     }
-    return true;
+    return false;
 });
