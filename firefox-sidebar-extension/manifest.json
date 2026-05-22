@@ -1,0 +1,34 @@
+{
+  "manifest_version": 2,
+  "name": "AI Chat Sidebar",
+  "version": "1.0.0",
+  "description": "Open AI chat websites in Firefox sidebar with customizable list",
+  "permissions": [
+    "storage",
+    "contextMenus",
+    "notifications",
+    "tabs",
+    "<all_urls>"
+  ],
+  "sidebar_action": {
+    "default_title": "AI Chat Sidebar",
+    "default_panel": "sidebar.html",
+    "default_icon": {
+      "16": "icons/icon16.svg",
+      "48": "icons/icon48.svg",
+      "128": "icons/icon128.svg"
+    },
+    "open_at_install": false
+  },
+  "icons": {
+    "16": "icons/icon16.svg",
+    "48": "icons/icon48.svg",
+    "128": "icons/icon128.svg"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "ai-chat-sidebar@example.com",
+      "strict_min_version": "57.0"
+    }
+  }
+}
