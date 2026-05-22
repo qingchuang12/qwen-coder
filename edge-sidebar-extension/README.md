@@ -1,0 +1,112 @@
+# AI Chat Sidebar - Edge Extension
+
+一个 Microsoft Edge 侧边栏插件，可以快速访问 AI 聊天网站，支持自定义增删网站和自定义显示名称。
+
+## 功能特点
+
+- ✅ 默认集成 DeepSeek Chat 和 Qwen Coder
+- ✅ 在 Edge 侧边栏中打开网站
+- ✅ 自定义添加/删除网站
+- ✅ 自定义网站显示名称
+- ✅ 数据同步（使用 Chrome Storage Sync）
+- ✅ 简洁美观的界面
+
+## 安装步骤
+
+### 方法一：开发者模式加载（推荐用于测试）
+
+1. **下载扩展文件**
+   - 克隆或下载此项目到本地
+
+2. **打开 Edge 扩展管理页面**
+   - 在 Edge 浏览器中访问：`edge://extensions/`
+   - 或者点击菜单 → 扩展 → 管理扩展
+
+3. **启用开发者模式**
+   - 打开左侧的"开发人员模式"开关
+
+4. **加载扩展**
+   - 点击"加载解压缩的扩展"
+   - 选择 `edge-sidebar-extension` 文件夹
+   - 扩展将立即安装并启用
+
+5. **使用扩展**
+   - 点击浏览器工具栏中的扩展图标
+   - 或在任意页面右键选择"Open AI Chat Sidebar"
+   - 侧边栏将在右侧打开
+
+### 方法二：打包成 .crx 文件安装
+
+1. 在 Edge 扩展管理页面 (`edge://extensions/`)
+2. 点击"打包扩展"
+3. 选择 `edge-sidebar-extension` 文件夹
+4. 生成 `.crx` 文件后拖入浏览器安装
+
+## 使用方法
+
+### 打开侧边栏
+- 点击浏览器工具栏中的扩展图标
+- 或在网页上右键 → 选择 "Open AI Chat Sidebar"
+
+### 添加新网站
+1. 点击 "+ Add New Site" 按钮
+2. 输入网站名称（如：ChatGPT）
+3. 输入网站 URL（如：https://chat.openai.com/）
+4. 点击 "Save" 保存
+
+### 编辑网站
+1. 点击网站卡片上的 "Edit" 按钮
+2. 修改名称或 URL
+3. 点击 "Save" 保存
+
+### 删除网站
+1. 点击网站卡片上的 "Delete" 按钮
+2. 确认删除
+
+### 访问网站
+- 点击任意网站卡片即可在侧边栏中打开该网站
+- 点击右上角的 ✕ 按钮关闭网站视图
+
+## 文件结构
+
+```
+edge-sidebar-extension/
+├── manifest.json      # 扩展配置文件
+├── background.js      # 后台服务脚本
+├── sidebar.html       # 侧边栏页面
+├── sidebar.js         # 侧边栏逻辑
+├── icons/             # 图标文件
+│   ├── icon16.svg
+│   ├── icon48.svg
+│   └── icon128.svg
+└── README.md          # 说明文档
+```
+
+## 自定义图标
+
+如果需要替换图标：
+1. 准备 PNG 格式的图标（16x16, 48x48, 128x128）
+2. 放入 `icons/` 文件夹
+3. 修改 `manifest.json` 中的图标路径
+4. 重新加载扩展
+
+## 注意事项
+
+- 某些网站可能不允许在 iframe 中嵌入（X-Frame-Options 限制）
+- 数据通过 Chrome Storage Sync 同步，需要登录 Microsoft 账户
+- 首次加载可能需要授权侧边栏权限
+
+## 技术栈
+
+- Manifest V3
+- Chrome Extension APIs (sidePanel, storage, contextMenus)
+- Vanilla JavaScript
+- HTML5 & CSS3
+
+## 许可证
+
+MIT License
+
+## 贡献
+
+欢迎提交 Issue 和 Pull Request！
