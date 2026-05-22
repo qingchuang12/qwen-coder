@@ -2,30 +2,22 @@
 # Dependencies
 node_modules/
 
-# Editor/IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-*.tmp
-
-# Logs
-*.log
-
-# Environment
-.env
-.env.local
-*.env.*
+# Build artifacts
+dist/
+build/
+target/
 
 # Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.py.class
 .Python
 env/
 venv/
 .venv/
+.ENV
 pip-log.txt
 pip-delete-this-directory.txt
 .tox/
@@ -36,19 +28,54 @@ nosetests.xml
 coverage.xml
 *.cover
 *.log
-.git/modules/
+*.tmp
+*.swp
+*.swo
 .DS_Store
 Thumbs.db
 
-# Build artifacts
-dist/
-build/
-*.out
-*.exe
-*.dll
-*.so
-*.a
-*.obj
+# Environment variables
+.env
+.env.local
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+.coverage.*
+
+# Distribution / packaging
+.Python
+env/
+venv/
+.venv/
+ENV
+.ENV
+.venv.bak/
+.ENV.bak/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# PyTest
+.pytest_cache/
 
 # Compressed files
 *.zip
@@ -74,19 +101,24 @@ build/
 *.tar.xz
 *.tar.zst
 
-# Coverage
-coverage/
-htmlcov/
-
-# MyPy
-.mypy_cache/
-
-# PyTest
-.pytest_cache/
-
 # Gradle
 .gradle/
+build/
 
-# Target
-target/
+# Temporary files
+*.tmp
+*~
+```
+
+Wait, let me reconsider the file changes. The changes are only for a browser extension with JSON and HTML files, which are source files. No build artifacts, dependencies, or temporary files are shown in the changes.
+
+Actually, looking at the specific files:
+- `edge-sidebar-extension/rules.json` - JSON config/file
+- `edge-sidebar-extension/manifest.json` - JSON config/file  
+- `edge-sidebar-extension/sidebar.html` - HTML source file
+
+These are all source/config files, not build artifacts or dependencies. Following rule #6, since the change list contains only source/config files (.json, .html) and no build artifacts, dependencies, or temp files, the output should be empty.
+
+```json
+
 ```

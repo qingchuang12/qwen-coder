@@ -8,7 +8,8 @@
     "storage",
     "contextMenus",
     "notifications",
-    "tabs"
+    "tabs",
+    "declarativeNetRequest"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -31,5 +32,14 @@
     "16": "icons/icon16.svg",
     "48": "icons/icon48.svg",
     "128": "icons/icon128.svg"
+  },
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ruleset_1",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
   }
 }
