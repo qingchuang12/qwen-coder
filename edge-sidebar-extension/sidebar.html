@@ -10,7 +10,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: #f5f5f5;
@@ -18,19 +18,19 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         .header {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: white;
             padding: 15px;
             text-align: center;
         }
-        
+
         .header h1 {
             font-size: 18px;
             font-weight: 600;
         }
-        
+
         .content-container {
             flex: 1;
             display: flex;
@@ -38,14 +38,14 @@
             padding: 15px;
             overflow-y: auto;
         }
-        
+
         .site-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
             margin-bottom: 15px;
         }
-        
+
         .site-card {
             background: white;
             border-radius: 10px;
@@ -57,24 +57,24 @@
             flex-direction: column;
             gap: 10px;
         }
-        
+
         .site-card:hover {
             border-color: #4a90d9;
             box-shadow: 0 4px 12px rgba(74, 144, 217, 0.2);
             transform: translateY(-2px);
         }
-        
+
         .site-card.active {
             border-color: #4a90d9;
             background: #e8f4fc;
         }
-        
+
         .site-header {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        
+
         .site-icon {
             width: 45px;
             height: 45px;
@@ -86,12 +86,12 @@
             font-size: 22px;
             flex-shrink: 0;
         }
-        
+
         .site-info {
             flex: 1;
             min-width: 0;
         }
-        
+
         .site-name {
             font-weight: 600;
             color: #333;
@@ -101,7 +101,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        
+
         .site-url {
             color: #888;
             font-size: 12px;
@@ -109,13 +109,13 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        
+
         .site-actions-row {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
         }
-        
+
         .btn {
             padding: 8px 12px;
             border: none;
@@ -128,49 +128,49 @@
             align-items: center;
             gap: 5px;
         }
-        
+
         .btn-view {
             background: linear-gradient(135deg, #4a90d9 0%, #3a7bc8 100%);
             color: white;
             flex: 1;
             justify-content: center;
         }
-        
+
         .btn-view:hover {
             box-shadow: 0 3px 8px rgba(74, 144, 217, 0.3);
             transform: translateY(-1px);
         }
-        
+
         .btn-newtab {
             background: linear-gradient(135deg, #27ae60 0%, #219a52 100%);
             color: white;
             flex: 1;
             justify-content: center;
         }
-        
+
         .btn-newtab:hover {
             box-shadow: 0 3px 8px rgba(39, 174, 96, 0.3);
             transform: translateY(-1px);
         }
-        
+
         .btn-edit {
             background: #f39c12;
             color: white;
         }
-        
+
         .btn-edit:hover {
             background: #e67e22;
         }
-        
+
         .btn-delete {
             background: #e74c3c;
             color: white;
         }
-        
+
         .btn-delete:hover {
             background: #c0392b;
         }
-        
+
         .add-site-btn {
             background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
             color: white;
@@ -187,12 +187,12 @@
             justify-content: center;
             gap: 8px;
         }
-        
+
         .add-site-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(52, 152, 219, 0.3);
         }
-        
+
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -205,11 +205,11 @@
             justify-content: center;
             z-index: 1000;
         }
-        
+
         .modal-overlay.active {
             display: flex;
         }
-        
+
         .modal {
             background: white;
             border-radius: 12px;
@@ -218,17 +218,17 @@
             max-width: 420px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
-        
+
         .modal h2 {
             font-size: 20px;
             margin-bottom: 20px;
             color: #333;
         }
-        
+
         .form-group {
             margin-bottom: 18px;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 6px;
@@ -236,7 +236,7 @@
             color: #555;
             font-size: 14px;
         }
-        
+
         .form-group input {
             width: 100%;
             padding: 12px;
@@ -245,18 +245,18 @@
             font-size: 14px;
             transition: border-color 0.2s;
         }
-        
+
         .form-group input:focus {
             outline: none;
             border-color: #4a90d9;
         }
-        
+
         .modal-actions {
             display: flex;
             gap: 10px;
             margin-top: 20px;
         }
-        
+
         .modal-actions button {
             flex: 1;
             padding: 12px;
@@ -266,25 +266,25 @@
             font-size: 14px;
             font-weight: 600;
         }
-        
+
         .btn-cancel {
             background: #e0e0e0;
             color: #333;
         }
-        
+
         .btn-cancel:hover {
             background: #d0d0d0;
         }
-        
+
         .btn-save {
             background: #4a90d9;
             color: white;
         }
-        
+
         .btn-save:hover {
             background: #3a7bc8;
         }
-        
+
         .empty-state {
             background: white;
             border-radius: 10px;
@@ -292,7 +292,7 @@
             text-align: center;
             color: #666;
         }
-        
+
         .empty-state p {
             font-size: 14px;
             line-height: 1.6;
@@ -303,17 +303,17 @@
     <div class="header">
         <h1>🤖 AI Chat Sites</h1>
     </div>
-    
+
     <div class="content-container">
         <div class="site-list" id="siteList">
             <!-- Sites will be rendered here -->
         </div>
-        
+
         <button class="add-site-btn" onclick="openAddModal()">
             <span>➕</span> Add New Site
         </button>
     </div>
-    
+
     <!-- Add/Edit Modal -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">

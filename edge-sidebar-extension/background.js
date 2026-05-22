@@ -8,7 +8,7 @@ chrome.runtime.onInstalled.addListener(() => {
         title: 'Open AI Chat Sidebar',
         contexts: ['page']
     });
-    
+
     // Set default side panel behavior - keep panel open when enabled
     if (chrome.sidePanel && chrome.sidePanel.setPanelBehavior) {
         chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
@@ -31,11 +31,11 @@ chrome.action.onClicked.addListener(async (tab) => {
 async function openSidePanel(tabId) {
     try {
         // Ensure side panel is enabled with correct path
-        await chrome.sidePanel.setOptions({ 
-            path: 'sidebar.html', 
-            enabled: true 
+        await chrome.sidePanel.setOptions({
+            path: 'sidebar.html',
+            enabled: true
         });
-        
+
         // This call must be in direct response to user gesture
         // The action.onClicked listener provides this context
         await chrome.sidePanel.open({ tabId: tabId });
@@ -55,8 +55,12 @@ async function openSidePanel(tabId) {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === 'openUrl') {
         // Open the URL in a new tab
-        chrome.tabs.create({ url: message.url }, () => {
-            sendResponse({ success: true });
+        chrome.tabs.create({ url: message.url }, (newTab) => {
+            if (chrome.runtime.lastError) {
+                sendResponse({ success: false, error: chrome.runtime.lastError.message });
+            } else {
+                sendResponse({ success: true, tabId: newTab.id });
+            }
         });
         return true; // Keep the message channel open for async response
     }

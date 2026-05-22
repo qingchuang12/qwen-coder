@@ -5,6 +5,10 @@ let sites = [];
 document.addEventListener('DOMContentLoaded', async () => {
   await loadSites();
   renderSiteList();
+  // 自动打开第一个网站
+  if (sites.length > 0) {
+    setTimeout(() => openInNewTab(0), 300);
+  }
 });
 
 async function loadSites() {
@@ -28,7 +32,7 @@ async function saveSites() {
 function renderSiteList() {
   const siteList = document.getElementById('siteList');
   siteList.innerHTML = '';
-  
+
   if (sites.length === 0) {
     siteList.innerHTML = `
       <div class="empty-state">
@@ -42,10 +46,10 @@ function renderSiteList() {
   sites.forEach((site, index) => {
     const card = document.createElement('div');
     card.className = 'site-card';
-    
+
     // 获取网站的首字母作为图标
     const initial = site.name.charAt(0).toUpperCase();
-    
+
     card.innerHTML = `
       <div class="site-header">
         <div class="site-icon">${initial}</div>
@@ -55,24 +59,52 @@ function renderSiteList() {
         </div>
       </div>
       <div class="site-actions-row">
-        <button class="btn btn-view" onclick="viewSite(${index})">👁️ View</button>
-        <button class="btn btn-newtab" onclick="openInNewTab(${index})">🚀 New Tab</button>
-        <button class="btn btn-edit" onclick="editSite(${index})">✏️ Edit</button>
-        <button class="btn btn-delete" onclick="deleteSite(${index})">🗑️ Delete</button>
+        <button class="btn btn-view" id="viewBtn-${index}">👁️ View</button>
+        <button class="btn btn-newtab" id="newTabBtn-${index}">🚀 New Tab</button>
+        <button class="btn btn-edit" id="editBtn-${index}">✏️ Edit</button>
+        <button class="btn btn-delete" id="deleteBtn-${index}">🗑️ Delete</button>
       </div>
     `;
-    
+
     siteList.appendChild(card);
   });
+
+  // 为所有按钮添加事件监听器 - 使用 setTimeout 确保 DOM 已渲染
+  setTimeout(() => {
+    sites.forEach((site, index) => {
+      const viewBtn = document.getElementById(`viewBtn-${index}`);
+      const newTabBtn = document.getElementById(`newTabBtn-${index}`);
+      const editBtn = document.getElementById(`editBtn-${index}`);
+      const deleteBtn = document.getElementById(`deleteBtn-${index}`);
+
+      console.log(`Setting up listeners for site ${index}:`, { viewBtn, newTabBtn, editBtn, deleteBtn });
+
+      if (viewBtn) viewBtn.addEventListener('click', () => { console.log('View clicked'); viewSite(index); });
+      if (newTabBtn) newTabBtn.addEventListener('click', () => { console.log('NewTab clicked'); openInNewTab(index); });
+      if (editBtn) editBtn.addEventListener('click', () => { console.log('Edit clicked'); editSite(index); });
+      if (deleteBtn) deleteBtn.addEventListener('click', () => { console.log('Delete clicked'); deleteSite(index); });
+    });
+  }, 100);
 }
 
 // 在新标签页打开网站（主要功能）
 function openInNewTab(index) {
-  if (index < 0 || index >= sites.length) return;
+  console.log('openInNewTab called with index:', index);
+  if (index < 0 || index >= sites.length) {
+    console.error('Invalid index:', index);
+    return;
+  }
   const site = sites[index];
-  chrome.runtime.sendMessage({ 
-    action: 'openUrl', 
-    url: site.url 
+  console.log('Opening site:', site);
+  chrome.runtime.sendMessage({
+    action: 'openUrl',
+    url: site.url
+  }, (response) => {
+    if (chrome.runtime.lastError) {
+      console.error('Message send error:', chrome.runtime.lastError);
+    } else {
+      console.log('Response:', response);
+    }
   });
 }
 
@@ -82,6 +114,7 @@ function viewSite(index) {
 }
 
 function editSite(index) {
+  console.log('editSite called with index:', index);
   const site = sites[index];
   document.getElementById('modalTitle').textContent = 'Edit Site';
   document.getElementById('siteName').value = site.name;
@@ -91,6 +124,7 @@ function editSite(index) {
 }
 
 function deleteSite(index) {
+  console.log('deleteSite called with index:', index);
   if (confirm(`Are you sure you want to delete "${sites[index].name}"?`)) {
     sites.splice(index, 1);
     saveSites();
@@ -99,6 +133,7 @@ function deleteSite(index) {
 }
 
 function openAddModal() {
+  console.log('openAddModal called');
   document.getElementById('modalTitle').textContent = 'Add New Site';
   document.getElementById('siteName').value = '';
   document.getElementById('siteUrl').value = '';
@@ -114,21 +149,21 @@ function saveSite() {
   const name = document.getElementById('siteName').value.trim();
   let url = document.getElementById('siteUrl').value.trim();
   const siteId = parseInt(document.getElementById('siteId').value);
-  
+
   if (!name) {
     alert('Please enter a site name');
     return;
   }
-  
+
   if (!url) {
     alert('Please enter a URL');
     return;
   }
-  
+
   if (!url.startsWith('http://') && !url.startsWith('https://')) {
     url = 'https://' + url;
   }
-  
+
   if (siteId === -1) {
     // Add new site
     sites.push({ name, url });
@@ -136,7 +171,7 @@ function saveSite() {
     // Edit existing site
     sites[siteId] = { name, url };
   }
-  
+
   saveSites();
   closeModal();
   renderSiteList();
