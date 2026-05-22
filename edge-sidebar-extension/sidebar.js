@@ -71,51 +71,17 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-// Open a site in the sidebar
+// Open a site in a new tab or navigate to it
+// Note: Many websites block iframe embedding via X-Frame-Options or CSP
+// So we open the site in a new tab instead
 function openSite(url) {
-    // Create or update iframe to show the site
-    let iframe = document.getElementById('siteIframe');
-    if (!iframe) {
-        iframe = document.createElement('iframe');
-        iframe.id = 'siteIframe';
-        iframe.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-            z-index: 999;
-        `;
-        document.body.appendChild(iframe);
-        
-        // Add close button
-        const closeBtn = document.createElement('button');
-        closeBtn.innerHTML = '✕';
-        closeBtn.style.cssText = `
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            width: 36px;
-            height: 36px;
-            border: none;
-            border-radius: 50%;
-            background: #e74c3c;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        `;
-        closeBtn.onclick = () => {
-            iframe.remove();
-            closeBtn.remove();
-        };
-        document.body.appendChild(closeBtn);
-    }
-    iframe.src = url;
+    // Send message to background script to open URL in current tab or new tab
+    chrome.runtime.sendMessage({ type: 'openUrl', url: url }, (response) => {
+        if (chrome.runtime.lastError) {
+            // Fallback: open in new tab directly
+            window.open(url, '_blank');
+        }
+    });
 }
 
 // Open modal for adding new site

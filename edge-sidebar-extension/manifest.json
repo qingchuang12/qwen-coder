@@ -6,7 +6,9 @@
   "permissions": [
     "sidePanel",
     "storage",
-    "contextMenus"
+    "contextMenus",
+    "notifications",
+    "tabs"
   ],
   "host_permissions": [
     "<all_urls>"
