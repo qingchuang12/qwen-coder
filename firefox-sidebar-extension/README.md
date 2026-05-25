@@ -23,13 +23,49 @@ A Firefox sidebar extension that allows you to access multiple AI chat websites 
 
 ### Permanent Installation
 
+#### Option 1: Sign with web-ext (Recommended)
+
+1. **Get API Credentials**:
+   - Go to [Firefox Add-on Developer Hub](https://addons.mozilla.org/developers/)
+   - Navigate to "API Key" section
+   - Generate your JWT credentials (Issuer and Secret)
+
+2. **Configure Environment Variables**:
+   ```bash
+   # Copy the example env file
+   cp .env.example .env
+   
+   # Edit .env with your credentials
+   WEB_EXT_API_KEY=your_issuer_here
+   WEB_EXT_API_SECRET=your_secret_here
+   WEB_EXT_CHANNEL=unlisted  # or "listed" for AMO publishing
+   ```
+
+3. **Sign the Extension**:
+   ```bash
+   # Install web-ext if not already installed
+   npm install -g web-ext
+   
+   # Sign the extension
+   web-ext sign
+   ```
+   
+   The signed `.xpi` file will be downloaded to the `web-ext-artifacts/` directory.
+
+4. **Install the Signed Extension**:
+   - Open Firefox and navigate to `about:addons`
+   - Click the gear icon → "Install Add-on From File"
+   - Select the signed `.xpi` file from `web-ext-artifacts/`
+
+#### Option 2: Manual Signing via Web Interface
+
 1. Package the extension as a `.xpi` file:
    ```bash
    cd firefox-sidebar-extension
    zip -r ../ai-chat-sidebar.xpi *
    ```
-2. Sign the extension through [Firefox Add-on Developer Hub](https://addons.mozilla.org/developers/)
-3. Install the signed `.xpi` file in Firefox
+2. Upload and sign through [Firefox Add-on Developer Hub](https://addons.mozilla.org/developers/)
+3. Download the signed `.xpi` file and install in Firefox
 
 ## Usage
 

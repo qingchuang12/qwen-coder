@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build output
+web-ext-artifacts/
+*.xpi
+
+# Environment files (contains secrets)
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
