@@ -27,8 +27,8 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "ai-chat-sidebar@example.com",
-      "strict_min_version": "57.0"
+      "id": "ai-chat-sidebar@ywhome.top",
+      "strict_min_version": "59.0"
     }
   }
 }
