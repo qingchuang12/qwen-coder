@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "priority": 1,
+    "priority": 10,
     "action": {
       "type": "modifyHeaders",
       "responseHeaders": [
@@ -12,12 +12,107 @@
         {
           "header": "content-security-policy",
           "operation": "remove"
+        },
+        {
+          "header": "x-content-security-policy",
+          "operation": "remove"
+        },
+        {
+          "header": "webkit-csp",
+          "operation": "remove"
         }
       ]
     },
     "condition": {
       "urlFilter": "*",
       "resourceTypes": ["sub_frame"]
+    }
+  },
+  {
+    "id": 2,
+    "priority": 20,
+    "action": {
+      "type": "modifyHeaders",
+      "responseHeaders": [
+        {
+          "header": "X-Frame-Options",
+          "operation": "remove"
+        },
+        {
+          "header": "content-security-policy",
+          "operation": "remove"
+        },
+        {
+          "header": "x-content-security-policy",
+          "operation": "remove"
+        },
+        {
+          "header": "webkit-csp",
+          "operation": "remove"
+        }
+      ]
+    },
+    "condition": {
+      "regexFilter": ".*\\.(deepseek|grok|x|openai|anthropic|google)\\.com.*",
+      "resourceTypes": ["main_frame", "sub_frame"]
+    }
+  },
+  {
+    "id": 3,
+    "priority": 20,
+    "action": {
+      "type": "modifyHeaders",
+      "responseHeaders": [
+        {
+          "header": "X-Frame-Options",
+          "operation": "remove"
+        },
+        {
+          "header": "content-security-policy",
+          "operation": "remove"
+        },
+        {
+          "header": "x-content-security-policy",
+          "operation": "remove"
+        },
+        {
+          "header": "webkit-csp",
+          "operation": "remove"
+        }
+      ]
+    },
+    "condition": {
+      "regexFilter": ".*chat\\.deepseek\\.com.*",
+      "resourceTypes": ["main_frame", "sub_frame"]
+    }
+  },
+  {
+    "id": 4,
+    "priority": 20,
+    "action": {
+      "type": "modifyHeaders",
+      "responseHeaders": [
+        {
+          "header": "X-Frame-Options",
+          "operation": "remove"
+        },
+        {
+          "header": "content-security-policy",
+          "operation": "remove"
+        },
+        {
+          "header": "x-content-security-policy",
+          "operation": "remove"
+        },
+        {
+          "header": "webkit-csp",
+          "operation": "remove"
+        }
+      ]
+    },
+    "condition": {
+      "regexFilter": ".*grok\\.com.*",
+      "resourceTypes": ["main_frame", "sub_frame"]
     }
   }
 ]

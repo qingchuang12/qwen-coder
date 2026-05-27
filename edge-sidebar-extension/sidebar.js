@@ -221,11 +221,31 @@ function loadSiteInIframe(index) {
     // Update dropdown selection
     document.getElementById('siteSelect').value = site.url;
     
+    // Track if iframe loaded successfully
+    let loadAttempted = false;
+    
     // Handle iframe load
     iframe.onload = () => {
+        loadAttempted = true;
         loadingOverlay.classList.add('hidden');
-        // Note: We can't detect X-Frame-Options errors directly
-        // The error will show as a blank page or browser error
+        
+        // Try to access iframe content to detect if it's blocked
+        // This will fail if the site has cross-origin restrictions
+        try {
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            if (iframeDoc && iframeDoc.body && iframeDoc.body.innerHTML.trim() === '') {
+                // Empty body might indicate blocking
+                setTimeout(() => {
+                    if (iframeDoc.body.innerHTML.trim() === '') {
+                        showError('This website blocks embedding in iframes.');
+                    }
+                }, 1000);
+            }
+        } catch (e) {
+            // Cross-origin error - this is normal for many sites
+            // Don't show error immediately as the site might still work
+            console.log('Cross-origin frame accessed - this is normal');
+        }
     };
     
     iframe.onerror = () => {
@@ -234,12 +254,13 @@ function loadSiteInIframe(index) {
     };
     
     // Show error state after timeout if still loading (likely blocked)
+    // But also provide a quick button to open in new tab
     setTimeout(() => {
         if (!loadingOverlay.classList.contains('hidden')) {
             loadingOverlay.classList.add('hidden');
-            showError('This website blocks embedding in iframes.');
+            showError('This website may block embedding in iframes. Try opening in a new tab.');
         }
-    }, 3000);
+    }, 5000);
 }
 
 // Show error state
