@@ -1,12 +1,12 @@
 ```
-# Dependencies
-node_modules/
-
 # Build artifacts
 dist/
 build/
 *.min.js
 *.bundle.js
+
+# Dependencies
+node_modules/
 
 # Logs and temp files
 *.log

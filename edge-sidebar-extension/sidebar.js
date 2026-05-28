@@ -215,41 +215,30 @@ function loadSiteInIframe(index) {
     loadingOverlay.classList.remove('hidden');
     errorState.classList.remove('visible');
     
-    // Set iframe src
+    // Set iframe src - use a direct approach
+    // First hide the iframe to prevent flash of content
+    iframe.style.visibility = 'hidden';
     iframe.src = site.url;
     
     // Update dropdown selection
     document.getElementById('siteSelect').value = site.url;
     
-    // Track if iframe loaded successfully
-    let loadAttempted = false;
+    // Reset error state
+    errorState.classList.remove('visible');
     
     // Handle iframe load
     iframe.onload = () => {
-        loadAttempted = true;
         loadingOverlay.classList.add('hidden');
+        iframe.style.visibility = 'visible';
         
-        // Try to access iframe content to detect if it's blocked
-        // This will fail if the site has cross-origin restrictions
-        try {
-            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-            if (iframeDoc && iframeDoc.body && iframeDoc.body.innerHTML.trim() === '') {
-                // Empty body might indicate blocking
-                setTimeout(() => {
-                    if (iframeDoc.body.innerHTML.trim() === '') {
-                        showError('This website blocks embedding in iframes.');
-                    }
-                }, 1000);
-            }
-        } catch (e) {
-            // Cross-origin error - this is normal for many sites
-            // Don't show error immediately as the site might still work
-            console.log('Cross-origin frame accessed - this is normal');
-        }
+        // Don't try to access iframe content - this will fail for cross-origin
+        // The declarativeNetRequest rules should handle header removal
+        console.log('Iframe loaded:', site.url);
     };
     
     iframe.onerror = () => {
         loadingOverlay.classList.add('hidden');
+        iframe.style.visibility = 'visible';
         showError('Failed to load the website.');
     };
     
@@ -258,9 +247,11 @@ function loadSiteInIframe(index) {
     setTimeout(() => {
         if (!loadingOverlay.classList.contains('hidden')) {
             loadingOverlay.classList.add('hidden');
-            showError('This website may block embedding in iframes. Try opening in a new tab.');
+            iframe.style.visibility = 'visible';
+            // Don't auto-show error - let user decide to open in new tab
+            // The site may still be functional even if we can't detect load
         }
-    }, 5000);
+    }, 8000);
 }
 
 // Show error state
