@@ -231,18 +231,16 @@ function loadSiteInIframe(index) {
     const urlToLoad = site.url;
     
     // For Microsoft Copilot, we need to use a different approach due to strict CSP
-    // Try loading with relaxed sandbox first
+    // Use minimal sandbox to avoid the allow-scripts/allow-same-origin warning
     if (site.url.includes('copilot.microsoft.com')) {
-        // Remove and recreate iframe with maximum permissions
+        // Remove and recreate iframe with relaxed permissions
         const oldIframe = iframe;
         const newIframe = document.createElement('iframe');
         newIframe.className = 'site-iframe';
         newIframe.id = 'siteIframe';
-        // Maximum permissive sandbox for copilot.microsoft.com
-        newIframe.sandbox = 'allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation allow-modals allow-pointer-lock allow-popups-to-escape-sandbox allow-downloads';
+        // Relaxed sandbox - avoid combining allow-scripts and allow-same-origin
+        newIframe.sandbox = 'allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-downloads';
         newIframe.setAttribute('allow', 'clipboard-write; clipboard-read; fullscreen; microphone; camera; display-capture; geolocation; encrypted-media; usb; midi');
-        newIframe.setAttribute('credentialless', 'true');
-        newIframe.setAttribute('crossorigin', 'anonymous');
         newIframe.style.width = '100%';
         newIframe.style.height = '100%';
         newIframe.style.border = 'none';

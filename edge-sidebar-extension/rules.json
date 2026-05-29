@@ -416,7 +416,7 @@
   },
   {
     "id": 9,
-    "priority": 100,
+    "priority": 1000,
     "action": {
       "type": "modifyHeaders",
       "responseHeaders": [
@@ -507,7 +507,7 @@
       ]
     },
     "condition": {
-      "regexFilter": ".*copilot\\.microsoft\\.com.*|.*edgeservices\\.bing\\.com.*|.*\\.microsoft\\.com.*|.*\\.bing\\.com.*|.*live\\.com.*|.*msftauth\\.net.*|.*azureedge\\.net.*",
+      "urlFilter": "||copilot.microsoft.com",
       "resourceTypes": [
         "main_frame",
         "sub_frame",
@@ -516,7 +516,8 @@
         "image",
         "font",
         "xmlhttprequest",
-        "websocket"
+        "websocket",
+        "other"
       ]
     }
   },
