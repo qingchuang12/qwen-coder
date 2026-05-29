@@ -218,7 +218,12 @@ function loadSiteInIframe(index) {
     // Set iframe src - use a direct approach
     // First hide the iframe to prevent flash of content
     iframe.style.visibility = 'hidden';
-    iframe.src = site.url;
+    
+    // Add cache-busting parameter for microsoft.com domains to avoid cached errors
+    const urlWithCacheBuster = site.url.includes('microsoft.com') 
+        ? site.url + (site.url.includes('?') ? '&' : '?') + '_cb=' + Date.now()
+        : site.url;
+    iframe.src = urlWithCacheBuster;
     
     // Update dropdown selection
     document.getElementById('siteSelect').value = site.url;

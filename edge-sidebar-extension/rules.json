@@ -432,6 +432,14 @@
         {
           "header": "x-webkit-csp",
           "operation": "remove"
+        },
+        {
+          "header": "Permissions-Policy",
+          "operation": "remove"
+        },
+        {
+          "header": "permissions-policy",
+          "operation": "remove"
         }
       ]
     },
