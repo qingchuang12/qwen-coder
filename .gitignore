@@ -1,27 +1,45 @@
 ```
-# Dependencies
-node_modules/
-
 # Build artifacts
 dist/
 build/
-*.min.js
-*.bundle.js
+*.js.map
+*.css.map
 
-# Logs and temp files
-*.log
+# Dependencies
+node_modules/
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 *.tmp
+
+# Logs
+*.log
 
 # Environment
 .env
 .env.local
 *.env.*
 
-# Editors
-.vscode/
-.idea/
+# Coverage and testing
+coverage/
+htmlcov/
+.coverage
+*.coverage
 
-# OS generated files
+# OS specific
 .DS_Store
 Thumbs.db
+
+# Compressed files
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
 ```

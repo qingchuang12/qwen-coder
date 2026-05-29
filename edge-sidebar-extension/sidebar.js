@@ -219,8 +219,8 @@ function loadSiteInIframe(index) {
     // First hide the iframe to prevent flash of content
     iframe.style.visibility = 'hidden';
     
-    // Add cache-busting parameter for microsoft.com domains to avoid cached errors
-    const urlWithCacheBuster = site.url.includes('microsoft.com') 
+    // Add cache-busting parameter for microsoft.com and bing.com domains to avoid cached errors
+    const urlWithCacheBuster = (site.url.includes('microsoft.com') || site.url.includes('bing.com'))
         ? site.url + (site.url.includes('?') ? '&' : '?') + '_cb=' + Date.now()
         : site.url;
     iframe.src = urlWithCacheBuster;

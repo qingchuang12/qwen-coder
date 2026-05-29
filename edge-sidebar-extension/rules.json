@@ -45,7 +45,9 @@
     },
     "condition": {
       "urlFilter": "*",
-      "resourceTypes": ["sub_frame"]
+      "resourceTypes": [
+        "sub_frame"
+      ]
     }
   },
   {
@@ -94,7 +96,10 @@
     },
     "condition": {
       "regexFilter": ".*\\.(deepseek|grok|x|twitter|openai|anthropic|google|claude|qwen|aliyun|tencent|baidu)\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   },
   {
@@ -143,7 +148,10 @@
     },
     "condition": {
       "regexFilter": ".*chat\\.deepseek\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   },
   {
@@ -192,7 +200,10 @@
     },
     "condition": {
       "regexFilter": ".*grok\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   },
   {
@@ -241,7 +252,10 @@
     },
     "condition": {
       "regexFilter": ".*chatgpt\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   },
   {
@@ -290,7 +304,10 @@
     },
     "condition": {
       "regexFilter": ".*claude\\.ai.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   },
   {
@@ -339,7 +356,10 @@
     },
     "condition": {
       "regexFilter": ".*poe\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   },
   {
@@ -388,7 +408,10 @@
     },
     "condition": {
       "regexFilter": ".*perplexity\\.ai.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   },
   {
@@ -440,12 +463,39 @@
         {
           "header": "permissions-policy",
           "operation": "remove"
+        },
+        {
+          "header": "Cross-Origin-Embedder-Policy",
+          "operation": "remove"
+        },
+        {
+          "header": "cross-origin-embedder-policy",
+          "operation": "remove"
+        },
+        {
+          "header": "Cross-Origin-Opener-Policy",
+          "operation": "remove"
+        },
+        {
+          "header": "cross-origin-opener-policy",
+          "operation": "remove"
+        },
+        {
+          "header": "Cross-Origin-Resource-Policy",
+          "operation": "remove"
+        },
+        {
+          "header": "cross-origin-resource-policy",
+          "operation": "remove"
         }
       ]
     },
     "condition": {
-      "regexFilter": ".*copilot\\.microsoft\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "regexFilter": ".*copilot\\.microsoft\\.com.*|.*\\.microsoft\\.com.*|.*\\.bing\\.com.*",
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   },
   {
@@ -494,7 +544,10 @@
     },
     "condition": {
       "regexFilter": ".*gemini\\.google\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   },
   {
@@ -543,7 +596,10 @@
     },
     "condition": {
       "regexFilter": ".*bard\\.google\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   },
   {
@@ -592,7 +648,10 @@
     },
     "condition": {
       "regexFilter": ".*huggingface\\.co.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   },
   {
@@ -641,7 +700,10 @@
     },
     "condition": {
       "regexFilter": ".*mistral\\.ai.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   },
   {
@@ -690,7 +752,10 @@
     },
     "condition": {
       "regexFilter": ".*cohere\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   },
   {
@@ -739,7 +804,10 @@
     },
     "condition": {
       "regexFilter": ".*character\\.ai.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   },
   {
@@ -788,7 +856,10 @@
     },
     "condition": {
       "regexFilter": ".*you\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   },
   {
@@ -837,7 +908,10 @@
     },
     "condition": {
       "regexFilter": ".*phind\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   },
   {
@@ -886,7 +960,10 @@
     },
     "condition": {
       "regexFilter": ".*writer\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   },
   {
@@ -935,7 +1012,10 @@
     },
     "condition": {
       "regexFilter": ".*jasper\\.ai.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   },
   {
@@ -984,7 +1064,10 @@
     },
     "condition": {
       "regexFilter": ".*notion\\.so.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
     }
   }
 ]
