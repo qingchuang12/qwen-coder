@@ -93,7 +93,7 @@
       ]
     },
     "condition": {
-      "regexFilter": ".*\\.(deepseek|grok|x|twitter|openai|anthropic|google|claude|qwen|aliyun|tencent|baidu)\\.com.*",
+      "regexFilter": ".*\\.(deepseek|grok|x|twitter|openai|anthropic|google|claude|qwen|aliyun|tencent|baidu|kimi)\\.com.*|.*github\\.com.*",
       "resourceTypes": ["main_frame", "sub_frame"]
     }
   },

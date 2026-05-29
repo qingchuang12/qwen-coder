@@ -109,7 +109,12 @@ async function loadSites() {
         browser.storage.local.get(['sites']).then((result) => {
             sites = result.sites || [
                 { name: 'DeepSeek Chat', url: 'https://chat.deepseek.com/' },
-                { name: 'Qwen Coder', url: 'https://coder.qwen.ai/' }
+                { name: 'Qwen Coder', url: 'https://coder.qwen.ai/' },
+                { name: 'Qwen Chat', url: 'https://chat.qwen.ai/' },
+                { name: 'Kimi', url: 'https://www.kimi.com/' },
+                { name: 'Grok', url: 'https://grok.com' },
+                { name: 'GitHub Copilot', url: 'https://github.com/copilot' },
+                { name: 'Microsoft Copilot', url: 'https://copilot.microsoft.com/' }
             ];
             resolve();
         });
