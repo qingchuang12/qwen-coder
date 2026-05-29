@@ -107,10 +107,17 @@ function setupEventListeners() {
 async function loadSites() {
     return new Promise((resolve) => {
         chrome.storage.sync.get(['sites'], (result) => {
-            sites = result.sites || [
-                { name: 'DeepSeek Chat', url: 'https://chat.deepseek.com/' },
-                { name: 'Qwen Coder', url: 'https://coder.qwen.ai/' }
-            ];
+            if (result.sites && result.sites.length > 0) {
+                // Use existing sites from storage - preserves user's login sessions
+                sites = result.sites;
+            } else {
+                // Only use default sites if no sites exist in storage
+                sites = [
+                    { name: 'DeepSeek Chat', url: 'https://chat.deepseek.com/' },
+                    { name: 'Qwen Coder', url: 'https://coder.qwen.ai/' },
+                    { name: 'Microsoft Copilot', url: 'https://copilot.microsoft.com/' }
+                ];
+            }
             resolve();
         });
     });
@@ -219,10 +226,9 @@ function loadSiteInIframe(index) {
     // First hide the iframe to prevent flash of content
     iframe.style.visibility = 'hidden';
     
-    // Add cache-busting parameter for microsoft.com and bing.com domains to avoid cached errors
-    const urlWithCacheBuster = (site.url.includes('microsoft.com') || site.url.includes('bing.com'))
-        ? site.url + (site.url.includes('?') ? '&' : '?') + '_cb=' + Date.now()
-        : site.url;
+    // DO NOT add cache-busting for microsoft.com domains - it breaks authentication
+    // The cache-busting was causing cookies to not be sent properly
+    const urlToLoad = site.url;
     
     // For Microsoft Copilot, we need to use a different approach due to strict CSP
     // Try loading with relaxed sandbox first
@@ -234,7 +240,7 @@ function loadSiteInIframe(index) {
         newIframe.id = 'siteIframe';
         // Maximum permissive sandbox for copilot.microsoft.com
         newIframe.sandbox = 'allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation allow-modals allow-pointer-lock allow-popups-to-escape-sandbox allow-downloads';
-        newIframe.setAttribute('allow', 'clipboard-write; clipboard-read; fullscreen; microphone; camera; display-capture; geolocation; encrypted-media');
+        newIframe.setAttribute('allow', 'clipboard-write; clipboard-read; fullscreen; microphone; camera; display-capture; geolocation; encrypted-media; usb; midi');
         newIframe.setAttribute('credentialless', 'true');
         newIframe.setAttribute('crossorigin', 'anonymous');
         newIframe.style.width = '100%';
@@ -247,7 +253,7 @@ function loadSiteInIframe(index) {
         
         // Update iframe reference
         const updatedIframe = document.getElementById('siteIframe');
-        updatedIframe.src = urlWithCacheBuster;
+        updatedIframe.src = urlToLoad;
         
         updatedIframe.onload = () => {
             loadingOverlay.classList.add('hidden');
@@ -261,7 +267,7 @@ function loadSiteInIframe(index) {
             showError('Failed to load the website.');
         };
     } else {
-        iframe.src = urlWithCacheBuster;
+        iframe.src = urlToLoad;
         
         // Handle iframe load
         iframe.onload = () => {

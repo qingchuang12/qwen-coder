@@ -507,7 +507,7 @@
       ]
     },
     "condition": {
-      "regexFilter": ".*copilot\\.microsoft\\.com.*|.*\\.microsoft\\.com.*|.*\\.bing\\.com.*",
+      "regexFilter": ".*copilot\\.microsoft\\.com.*|.*edgeservices\\.bing\\.com.*|.*\\.microsoft\\.com.*|.*\\.bing\\.com.*|.*live\\.com.*|.*msftauth\\.net.*|.*azureedge\\.net.*",
       "resourceTypes": [
         "main_frame",
         "sub_frame",
