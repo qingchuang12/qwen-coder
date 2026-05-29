@@ -1,7 +1,27 @@
 ```
-# Editor/IDE files
-.vscode/
+# Build artifacts
+dist/
+build/
+*.min.js
+*.bundle.js
 
-# Logs
+# Dependencies
+node_modules/
+
+# Logs and temp files
 *.log
+*.tmp
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
 ```

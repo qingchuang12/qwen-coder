@@ -421,10 +421,6 @@
       "type": "modifyHeaders",
       "responseHeaders": [
         {
-          "header": "X-Frame-Options",
-          "operation": "remove"
-        },
-        {
           "header": "Content-Security-Policy",
           "operation": "remove"
         },
@@ -433,27 +429,15 @@
           "operation": "remove"
         },
         {
-          "header": "X-Content-Security-Policy",
+          "header": "Content-Security-Policy-Report-Only",
           "operation": "remove"
         },
         {
-          "header": "x-content-security-policy",
+          "header": "content-security-policy-report-only",
           "operation": "remove"
         },
         {
-          "header": "WebKit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "webkit-csp",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Webkit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "x-webkit-csp",
+          "header": "X-Frame-Options",
           "operation": "remove"
         },
         {
@@ -487,37 +471,13 @@
         {
           "header": "cross-origin-resource-policy",
           "operation": "remove"
-        },
-        {
-          "header": "Report-To",
-          "operation": "remove"
-        },
-        {
-          "header": "report-to",
-          "operation": "remove"
-        },
-        {
-          "header": "NEL",
-          "operation": "remove"
-        },
-        {
-          "header": "nel",
-          "operation": "remove"
         }
       ]
     },
     "condition": {
       "urlFilter": "||copilot.microsoft.com",
       "resourceTypes": [
-        "main_frame",
-        "sub_frame",
-        "script",
-        "stylesheet",
-        "image",
-        "font",
-        "xmlhttprequest",
-        "websocket",
-        "other"
+        "sub_frame"
       ]
     }
   },

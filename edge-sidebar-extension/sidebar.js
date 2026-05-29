@@ -239,6 +239,7 @@ function loadSiteInIframe(index) {
         newIframe.className = 'site-iframe';
         newIframe.id = 'siteIframe';
         // Relaxed sandbox - avoid combining allow-scripts and allow-same-origin
+        // Do NOT include allow-same-origin to prevent the security warning
         newIframe.sandbox = 'allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-downloads';
         newIframe.setAttribute('allow', 'clipboard-write; clipboard-read; fullscreen; microphone; camera; display-capture; geolocation; encrypted-media; usb; midi');
         newIframe.style.width = '100%';
@@ -265,6 +266,7 @@ function loadSiteInIframe(index) {
             showError('Failed to load the website.');
         };
     } else {
+        // For other sites, just set src directly without modifying sandbox
         iframe.src = urlToLoad;
         
         // Handle iframe load
