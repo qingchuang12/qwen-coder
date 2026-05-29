@@ -416,7 +416,7 @@
   },
   {
     "id": 9,
-    "priority": 10,
+    "priority": 100,
     "action": {
       "type": "modifyHeaders",
       "responseHeaders": [
@@ -487,6 +487,22 @@
         {
           "header": "cross-origin-resource-policy",
           "operation": "remove"
+        },
+        {
+          "header": "Report-To",
+          "operation": "remove"
+        },
+        {
+          "header": "report-to",
+          "operation": "remove"
+        },
+        {
+          "header": "NEL",
+          "operation": "remove"
+        },
+        {
+          "header": "nel",
+          "operation": "remove"
         }
       ]
     },
@@ -494,7 +510,13 @@
       "regexFilter": ".*copilot\\.microsoft\\.com.*|.*\\.microsoft\\.com.*|.*\\.bing\\.com.*",
       "resourceTypes": [
         "main_frame",
-        "sub_frame"
+        "sub_frame",
+        "script",
+        "stylesheet",
+        "image",
+        "font",
+        "xmlhttprequest",
+        "websocket"
       ]
     }
   },

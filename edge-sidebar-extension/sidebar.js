@@ -223,29 +223,62 @@ function loadSiteInIframe(index) {
     const urlWithCacheBuster = (site.url.includes('microsoft.com') || site.url.includes('bing.com'))
         ? site.url + (site.url.includes('?') ? '&' : '?') + '_cb=' + Date.now()
         : site.url;
-    iframe.src = urlWithCacheBuster;
     
-    // Update dropdown selection
-    document.getElementById('siteSelect').value = site.url;
-    
-    // Reset error state
-    errorState.classList.remove('visible');
-    
-    // Handle iframe load
-    iframe.onload = () => {
-        loadingOverlay.classList.add('hidden');
-        iframe.style.visibility = 'visible';
+    // For Microsoft Copilot, we need to use a different approach due to strict CSP
+    // Try loading with relaxed sandbox first
+    if (site.url.includes('copilot.microsoft.com')) {
+        // Remove and recreate iframe with maximum permissions
+        const oldIframe = iframe;
+        const newIframe = document.createElement('iframe');
+        newIframe.className = 'site-iframe';
+        newIframe.id = 'siteIframe';
+        // Maximum permissive sandbox for copilot.microsoft.com
+        newIframe.sandbox = 'allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation allow-modals allow-pointer-lock allow-popups-to-escape-sandbox allow-downloads';
+        newIframe.setAttribute('allow', 'clipboard-write; clipboard-read; fullscreen; microphone; camera; display-capture; geolocation; encrypted-media');
+        newIframe.setAttribute('credentialless', 'true');
+        newIframe.setAttribute('crossorigin', 'anonymous');
+        newIframe.style.width = '100%';
+        newIframe.style.height = '100%';
+        newIframe.style.border = 'none';
+        newIframe.style.display = 'block';
+        newIframe.style.visibility = 'hidden';
         
-        // Don't try to access iframe content - this will fail for cross-origin
-        // The declarativeNetRequest rules should handle header removal
-        console.log('Iframe loaded:', site.url);
-    };
-    
-    iframe.onerror = () => {
-        loadingOverlay.classList.add('hidden');
-        iframe.style.visibility = 'visible';
-        showError('Failed to load the website.');
-    };
+        oldIframe.parentNode.replaceChild(newIframe, oldIframe);
+        
+        // Update iframe reference
+        const updatedIframe = document.getElementById('siteIframe');
+        updatedIframe.src = urlWithCacheBuster;
+        
+        updatedIframe.onload = () => {
+            loadingOverlay.classList.add('hidden');
+            updatedIframe.style.visibility = 'visible';
+            console.log('Iframe loaded:', site.url);
+        };
+        
+        updatedIframe.onerror = () => {
+            loadingOverlay.classList.add('hidden');
+            updatedIframe.style.visibility = 'visible';
+            showError('Failed to load the website.');
+        };
+    } else {
+        iframe.src = urlWithCacheBuster;
+        
+        // Handle iframe load
+        iframe.onload = () => {
+            loadingOverlay.classList.add('hidden');
+            iframe.style.visibility = 'visible';
+            
+            // Don't try to access iframe content - this will fail for cross-origin
+            // The declarativeNetRequest rules should handle header removal
+            console.log('Iframe loaded:', site.url);
+        };
+        
+        iframe.onerror = () => {
+            loadingOverlay.classList.add('hidden');
+            iframe.style.visibility = 'visible';
+            showError('Failed to load the website.');
+        };
+    }
     
     // Show error state after timeout if still loading (likely blocked)
     // But also provide a quick button to open in new tab
