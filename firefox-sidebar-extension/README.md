@@ -1,128 +1,129 @@
-# AI Chat Sidebar for Firefox
+# AI 聊天侧边栏 - Firefox 版
 
-A Firefox sidebar extension that allows you to access multiple AI chat websites in a convenient sidebar panel.
+一个 Firefox 侧边栏扩展，让您可以在便捷的侧边栏面板中访问多个 AI 聊天网站。
 
-## Features
+## 功能特点
 
-- 🤖 Quick access to multiple AI chat services (DeepSeek, Qwen Coder, etc.)
-- 📌 Persistent sidebar panel that stays open while browsing
-- ➕ Add, edit, and delete custom AI chat sites
-- 🚀 Open current site in a new tab
-- 💾 Remembers your last visited site
-- 🎨 Clean, modern UI with smooth animations
+- 🤖 快速访问多种 AI 聊天服务（DeepSeek、Qwen Coder 等）
+- 📌 侧边栏面板在浏览时保持打开状态
+- ➕ 添加、编辑和删除自定义 AI 聊天网站
+- 🚀 在当前标签页中打开网站
+- 💾 记住您上次访问的网站
+- 🎨 简洁现代的界面，带有流畅动画
 
-## Installation
+## 安装方法
 
-### Temporary Installation (for development/testing)
+### 临时安装（用于开发/测试）
 
-1. Open Firefox and navigate to `about:debugging`
-2. Click on "This Firefox" in the left sidebar
-3. Click "Load Temporary Add-on..."
-4. Navigate to the extension folder and select `manifest.json`
-5. The extension will be loaded temporarily (will be removed when Firefox closes)
+1. 打开 Firefox 并访问 `about:debugging`
+2. 点击左侧边栏中的"此 Firefox"
+3. 点击"加载临时附加组件..."
+4. 导航到扩展文件夹并选择 `manifest.json`
+5. 扩展将临时加载（Firefox 关闭后将自动移除）
 
-### Permanent Installation
+### 永久安装
 
-#### Option 1: Sign with web-ext (Recommended)
+#### 方式一：使用 web-ext 签名（推荐）
 
-1. **Get API Credentials**:
-   - Go to [Firefox Add-on Developer Hub](https://addons.mozilla.org/developers/)
-   - Navigate to "API Key" section
-   - Generate your JWT credentials (Issuer and Secret)
+1. **获取 API 凭证**：
+   - 前往 [Firefox 附加组件开发者中心](https://addons.mozilla.org/developers/)
+   - 进入"API 密钥"部分
+   - 生成您的 JWT 凭证（颁发者和密钥）
 
-2. **Configure Environment Variables**:
+2. **配置环境变量**：
    ```bash
-   # Copy the example env file
+   # 复制示例环境文件
    cp .env.example .env
    
-   # Edit .env with your credentials
-   WEB_EXT_API_KEY=your_issuer_here
-   WEB_EXT_API_SECRET=your_secret_here
-   WEB_EXT_CHANNEL=unlisted  # or "listed" for AMO publishing
+   # 使用您的凭证编辑 .env 文件
+   WEB_EXT_API_KEY=您的颁发者
+   WEB_EXT_API_SECRET=您的密钥
+   WEB_EXT_CHANNEL=unlisted  # 或使用 "listed" 用于 AMO 发布
    ```
 
-3. **Sign the Extension**:
+3. **签名扩展**：
    ```bash
-   # Install web-ext if not already installed
+   # 如果尚未安装 web-ext，请先安装
    npm install -g web-ext
-   
-   # Sign the extension
+   # 构建扩展
+   web-ext build
+   # 签名扩展
    web-ext sign
    ```
    
-   The signed `.xpi` file will be downloaded to the `web-ext-artifacts/` directory.
+   签名后的 `.xpi` 文件将下载到 `web-ext-artifacts/` 目录中。
 
-4. **Install the Signed Extension**:
-   - Open Firefox and navigate to `about:addons`
-   - Click the gear icon → "Install Add-on From File"
-   - Select the signed `.xpi` file from `web-ext-artifacts/`
+4. **安装签名后的扩展**：
+   - 打开 Firefox 并访问 `about:addons`
+   - 点击齿轮图标 → "从文件安装附加组件"
+   - 从 `web-ext-artifacts/` 目录中选择签名的 `.xpi` 文件
 
-#### Option 2: Manual Signing via Web Interface
+#### 方式二：通过网页界面手动签名
 
-1. Package the extension as a `.xpi` file:
+1. 将扩展打包为 `.xpi` 文件：
    ```bash
    cd firefox-sidebar-extension
    zip -r ../ai-chat-sidebar.xpi *
    ```
-2. Upload and sign through [Firefox Add-on Developer Hub](https://addons.mozilla.org/developers/)
-3. Download the signed `.xpi` file and install in Firefox
+2. 通过 [Firefox 附加组件开发者中心](https://addons.mozilla.org/developers/) 上传并签名
+3. 下载签名的 `.xpi` 文件并在 Firefox 中安装
 
-## Usage
+## 使用方法
 
-1. **Open the Sidebar**: Click the extension icon in the Firefox toolbar
-2. **Select a Site**: Use the dropdown at the top to choose an AI chat service
-3. **Manage Sites**: Click "⚙️ Manage" to add, edit, or remove sites
-4. **New Tab**: Click "🚀 New Tab" to open the current site in a full browser tab
+1. **打开侧边栏**：点击 Firefox 工具栏中的扩展图标
+2. **选择网站**：使用顶部的下拉菜单选择 AI 聊天服务
+3. **管理网站**：点击"⚙️ 管理"添加、编辑或删除网站
+4. **新标签页**：点击"🚀 新标签页"在当前网站的完整浏览器标签页中打开
 
-## Default Sites
+## 默认网站
 
-- DeepSeek Chat: https://chat.deepseek.com/
-- Qwen Coder: https://coder.qwen.ai/
+- DeepSeek Chat：https://chat.deepseek.com/
+- Qwen Coder：https://coder.qwen.ai/
 
-You can add more sites through the Manage panel.
+您可以通过管理面板添加更多网站。
 
-## Differences from Edge Version
+## 与 Edge 版的区别
 
-This Firefox version uses:
-- Manifest V2 (required for Firefox sidebar support)
-- `sidebar_action` instead of `side_panel`
-- `browser.*` API instead of `chrome.*` API
-- Local storage instead of sync storage
-- `webRequest` API instead of `declarativeNetRequest` for removing iframe-blocking headers
+此 Firefox 版本使用：
+- Manifest V2（Firefox 侧边栏支持所需）
+- `sidebar_action` 代替 `side_panel`
+- `browser.*` API 代替 `chrome.*` API
+- 本地存储代替同步存储
+- `webRequest` API 代替 `declarativeNetRequest`，用于移除 iframe 阻止头
 
-### Key Feature Parity with Edge Version
+### 与 Edge 版功能对比
 
-| Feature | Edge | Firefox |
+| 功能 | Edge | Firefox |
 |---------|------|---------|
-| Side panel/Sidebar | ✅ `sidePanel` API | ✅ `sidebarAction` API |
-| Context menu | ✅ | ✅ |
-| Header modification | ✅ `declarativeNetRequest` | ✅ `webRequest` API |
-| Storage | ✅ `chrome.storage.sync` | ✅ `browser.storage.local` |
-| Last visited site | ✅ | ✅ |
-| Manage sites | ✅ | ✅ |
-| Open in new tab | ✅ | ✅ |
-| Iframe sandbox | ✅ Enhanced permissions | ✅ Enhanced permissions |
+| 侧边栏面板/侧边栏 | ✅ `sidePanel` API | ✅ `sidebarAction` API |
+| 右键菜单 | ✅ | ✅ |
+| 请求头修改 | ✅ `declarativeNetRequest` | ✅ `webRequest` API |
+| 存储 | ✅ `chrome.storage.sync` | ✅ `browser.storage.local` |
+| 上次访问的网站 | ✅ | ✅ |
+| 管理网站 | ✅ | ✅ |
+| 在新标签页中打开 | ✅ | ✅ |
+| iframe 沙箱 | ✅ 增强权限 | ✅ 增强权限 |
 
-## File Structure
+## 文件结构
 
 ```
 firefox-sidebar-extension/
-├── manifest.json      # Extension manifest
-├── background.js      # Background script
-├── sidebar.html       # Sidebar UI
-├── sidebar.js         # Sidebar logic
-└── icons/             # Extension icons
+├── manifest.json      # 扩展配置文件
+├── background.js      # 后台脚本
+├── sidebar.html       # 侧边栏 UI
+├── sidebar.js         # 侧边栏逻辑
+└── icons/             # 扩展图标
     ├── icon16.svg
     ├── icon48.svg
     └── icon128.svg
 ```
 
-## Development Notes
+## 开发说明
 
-- Firefox uses `browser.*` APIs which are Promise-based
-- Storage uses `browser.storage.local` instead of `chrome.storage.sync`
-- The sidebar is opened via toolbar icon click (Firefox limitation)
+- Firefox 使用基于 Promise 的 `browser.*` API
+- 存储使用 `browser.storage.local` 代替 `chrome.storage.sync`
+- 侧边栏通过点击工具栏图标打开（Firefox 的限制）
 
-## License
+## 许可证
 
-MIT License
+MIT 许可证

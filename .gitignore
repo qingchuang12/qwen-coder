@@ -4,12 +4,12 @@ node_modules/
 # Logs and temp files
 *.log
 *.tmp
-
+firefox-sidebar-extension/web-ext-artifacts
+firefox-sidebar-extension/.amo-upload-uuid
 # Environment
 .env
 .env.local
 .env.*
-
 # Editors
 .vscode/
 .idea/
@@ -44,12 +44,10 @@ pip-delete-this-directory.txt
 nosetests.xml
 coverage.xml
 *.cover
-*.log
 .git/modules/
 *.sublime-workspace
 .pytest_cache/
 .hypothesis/
-.DS_Store
 .sass-cache/
 .well-known/
 .coverage.xml
@@ -74,7 +72,6 @@ lerna-debug.log*
 
 # IDE
 .vs/
-.idea/
 *.swp
 *.swo
 
@@ -124,7 +121,6 @@ docs/_build/
 .github/
 
 # Distribution / packaging
-.Python
 eggs/
 .eggs/
 lib/
@@ -134,29 +130,19 @@ sdist/
 develop-eggs/
 .installed.cfg
 *.egg-info/
-.installed.cfg
-*.egg-info/
 MANIFEST
 
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# mypy
-.mypy_cache/
 .dmypy.json
 dmypy.json
 
-# Pyre
-.pyre/
-
-# pytype
-.pytype/
 
 # Local configuration file (sdk storage, etc)
 .settings/
 
 # Mac
-.DS_Store
 .AppleDouble
 .LSOverride
 
@@ -164,11 +150,9 @@ dmypy.json
 *~
 
 # Windows
-Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
-*.cab
 *.msi
 *.msix
 *.msm
@@ -180,9 +164,7 @@ $RECYCLE.BIN/
 *.lprof
 captures/
 .gradle/
-build/
 local.properties
-.settings/
 loadavg
 bin/
 genfiles/
@@ -195,7 +177,6 @@ cmake/
 *.jks
 *.apk
 *.aar
-*.so
 .libs/
 obj/
 jniLibs/
@@ -203,138 +184,6 @@ proguard/
 lint/
 renderscript/
 shaders/
-res/raw/
-res/values/
-res/xml/
-res/layout/
-res/menu/
-res/drawable/
-res/mipmap/
-res/color/
-res/anim/
-res/transition/
-res/interpolator/
-res/raw/
-res/values/
-res/xml/
-res/layout/
-res/menu/
-res/drawable/
-res/mipmap/
-res/color/
-res/anim/
-res/transition/
-res/interpolator/
-res/raw/
-res/values/
-res/xml/
-res/layout/
-res/menu/
-res/drawable/
-res/mipmap/
-res/color/
-res/anim/
-res/transition/
-res/interpolator/
-res/raw/
-res/values/
-res/xml/
-res/layout/
-res/menu/
-res/drawable/
-res/mipmap/
-res/color/
-res/anim/
-res/transition/
-res/interpolator/
-res/raw/
-res/values/
-res/xml/
-res/layout/
-res/menu/
-res/drawable/
-res/mipmap/
-res/color/
-res/anim/
-res/transition/
-res/interpolator/
-res/raw/
-res/values/
-res/xml/
-res/layout/
-res/menu/
-res/drawable/
-res/mipmap/
-res/color/
-res/anim/
-res/transition/
-res/interpolator/
-res/raw/
-res/values/
-res/xml/
-res/layout/
-res/menu/
-res/drawable/
-res/mipmap/
-res/color/
-res/anim/
-res/transition/
-res/interpolator/
-res/raw/
-res/values/
-res/xml/
-res/layout/
-res/menu/
-res/drawable/
-res/mipmap/
-res/color/
-res/anim/
-res/transition/
-res/interpolator/
-res/raw/
-res/values/
-res/xml/
-res/layout/
-res/menu/
-res/drawable/
-res/mipmap/
-res/color/
-res/anim/
-res/transition/
-res/interpolator/
-res/raw/
-res/values/
-res/xml/
-res/layout/
-res/menu/
-res/drawable/
-res/mipmap/
-res/color/
-res/anim/
-res/transition/
-res/interpolator/
-res/raw/
-res/values/
-res/xml/
-res/layout/
-res/menu/
-res/drawable/
-res/mipmap/
-res/color/
-res/anim/
-res/transition/
-res/interpolator/
-res/raw/
-res/values/
-res/xml/
-res/layout/
-res/menu/
-res/drawable/
-res/mipmap/
-res/color/
-res/anim/
-res/transition/
-res/interpolator/
 res/raw/
 res/values/
 res/xml/
