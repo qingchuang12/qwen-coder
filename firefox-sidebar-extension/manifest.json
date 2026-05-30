@@ -8,10 +8,12 @@
     "contextMenus",
     "notifications",
     "tabs",
+    "webRequest",
+    "webRequestBlocking",
     "<all_urls>"
   ],
   "sidebar_action": {
-    "default_title": "AI Chat Sidebar",
+    "default_title": "Open AI Chat Sidebar",
     "default_panel": "sidebar.html",
     "default_icon": {
       "16": "icons/icon16.svg",
@@ -30,5 +32,9 @@
       "id": "ai-chat-sidebar@ywhome.top",
       "strict_min_version": "59.0"
     }
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
   }
 }

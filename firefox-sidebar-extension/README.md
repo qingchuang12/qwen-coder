@@ -88,6 +88,20 @@ This Firefox version uses:
 - `sidebar_action` instead of `side_panel`
 - `browser.*` API instead of `chrome.*` API
 - Local storage instead of sync storage
+- `webRequest` API instead of `declarativeNetRequest` for removing iframe-blocking headers
+
+### Key Feature Parity with Edge Version
+
+| Feature | Edge | Firefox |
+|---------|------|---------|
+| Side panel/Sidebar | ✅ `sidePanel` API | ✅ `sidebarAction` API |
+| Context menu | ✅ | ✅ |
+| Header modification | ✅ `declarativeNetRequest` | ✅ `webRequest` API |
+| Storage | ✅ `chrome.storage.sync` | ✅ `browser.storage.local` |
+| Last visited site | ✅ | ✅ |
+| Manage sites | ✅ | ✅ |
+| Open in new tab | ✅ | ✅ |
+| Iframe sandbox | ✅ Enhanced permissions | ✅ Enhanced permissions |
 
 ## File Structure
 

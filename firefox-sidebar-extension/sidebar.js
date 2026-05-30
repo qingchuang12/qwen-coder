@@ -31,6 +31,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
         showError('No sites configured. Click "Manage" to add sites.');
     }
+    
+    // Save last visited site when page unloads
+    window.addEventListener('beforeunload', () => {
+        if (currentIndex >= 0 && currentIndex < sites.length) {
+            browser.storage.local.set({ lastVisitedIndex: currentIndex });
+        }
+    });
 });
 
 // Setup all event listeners
@@ -220,31 +227,40 @@ function loadSiteInIframe(index) {
     loadingOverlay.classList.remove('hidden');
     errorState.classList.remove('visible');
     
-    // Set iframe src
+    // Hide iframe to prevent flash of content
+    iframe.style.visibility = 'hidden';
     iframe.src = site.url;
     
     // Update dropdown selection
     document.getElementById('siteSelect').value = site.url;
     
+    // Reset error state
+    errorState.classList.remove('visible');
+    
     // Handle iframe load
     iframe.onload = () => {
         loadingOverlay.classList.add('hidden');
-        // Note: We can't detect X-Frame-Options errors directly
-        // The error will show as a blank page or browser error
+        iframe.style.visibility = 'visible';
+        
+        console.log('Iframe loaded:', site.url);
     };
     
     iframe.onerror = () => {
         loadingOverlay.classList.add('hidden');
+        iframe.style.visibility = 'visible';
         showError('Failed to load the website.');
     };
     
     // Show error state after timeout if still loading (likely blocked)
+    // But also provide a quick button to open in new tab
     setTimeout(() => {
         if (!loadingOverlay.classList.contains('hidden')) {
             loadingOverlay.classList.add('hidden');
-            showError('This website blocks embedding in iframes.');
+            iframe.style.visibility = 'visible';
+            // Don't auto-show error - let user decide to open in new tab
+            // The site may still be functional even if we can't detect load
         }
-    }, 3000);
+    }, 8000);
 }
 
 // Show error state
