@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "AI Chat Sidebar",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Open AI chat websites in Firefox sidebar with customizable list",
   "permissions": [
     "storage",
@@ -21,7 +21,7 @@
     }
   },
   "sidebar_action": {
-    "default_title": "",
+    "default_title": "AI Chat Sidebar",
     "default_icon": {
       "16": "icons/icon16.svg",
       "48": "icons/icon48.svg",
