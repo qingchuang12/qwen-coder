@@ -8,6 +8,11 @@ const headersToRemove = [
     'x-webkit-csp'
 ];
 
+// Handle toolbar button click - toggle sidebar
+browser.browserAction.onClicked.addListener(() => {
+    browser.sidebarAction.toggle();
+});
+
 // Set up context menu for opening sidebar
 browser.runtime.onInstalled.addListener(() => {
     // Create context menu item
@@ -21,14 +26,7 @@ browser.runtime.onInstalled.addListener(() => {
 // Handle context menu clicks
 browser.contextMenus.onClicked.addListener((info, tab) => {
     if (info.menuItemId === 'openSidebar') {
-        // For Firefox, we just notify the user to click the toolbar icon
-        // since programmatic sidebar opening is limited
-        browser.notifications.create({
-            type: 'basic',
-            iconUrl: 'icons/icon48.svg',
-            title: 'AI Chat Sidebar',
-            message: 'Click the extension icon in the toolbar to open the sidebar.'
-        });
+        browser.sidebarAction.open();
     }
 });
 
