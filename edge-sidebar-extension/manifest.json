@@ -15,25 +15,16 @@
   "browser_action": {
     "default_title": "AI Chat Sidebar",
     "default_icon": {
-      "16": "../common/icons/icon16.svg",
-      "48": "../common/icons/icon48.svg",
-      "128": "../common/icons/icon128.svg"
-    }
-  },
-  "sidebar_action": {
-    "default_title": "AI Chat Sidebar",
-    "default_icon": {
-      "16": "../common/icons/icon16.svg",
-      "48": "../common/icons/icon48.svg",
-      "128": "../common/icons/icon128.svg"
+      "16": "icons/icon16.svg",
+      "48": "icons/icon48.svg",
+      "128": "icons/icon128.svg"
     },
-    "default_panel": "sidebar.html",
-    "open_at_install": false
+    "default_popup": "sidebar.html"
   },
   "icons": {
-    "16": "../common/icons/icon16.svg",
-    "48": "../common/icons/icon48.svg",
-    "128": "../common/icons/icon128.svg"
+    "16": "icons/icon16.svg",
+    "48": "icons/icon48.svg",
+    "128": "icons/icon128.svg"
   },
   "background": {
     "scripts": ["background.js"],

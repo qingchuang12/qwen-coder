@@ -8,30 +8,21 @@ const headersToRemove = [
     'x-webkit-csp'
 ];
 
-// Handle toolbar button click - toggle sidebar
-chrome.browserAction.onClicked.addListener(() => {
-    // For Edge Manifest V2, we use sidebarAction if available
-    if (chrome.sidebarAction) {
-        chrome.sidebarAction.toggle();
-    }
-});
-
-// Set up context menu for opening sidebar
+// Set up context menu for opening in new tab
 chrome.runtime.onInstalled.addListener(() => {
     // Create context menu item
     chrome.contextMenus.create({
-        id: 'openSidebar',
-        title: 'Open AI Chat Sidebar',
+        id: 'openInNewTab',
+        title: 'Open AI Chat in New Tab',
         contexts: ['page']
     });
 });
 
 // Handle context menu clicks
 chrome.contextMenus.onClicked.addListener((info, tab) => {
-    if (info.menuItemId === 'openSidebar') {
-        if (chrome.sidebarAction) {
-            chrome.sidebarAction.open();
-        }
+    if (info.menuItemId === 'openInNewTab') {
+        // Open default site in new tab
+        chrome.tabs.create({ url: 'https://chat.deepseek.com/' });
     }
 });
 
@@ -94,7 +85,7 @@ chrome.webRequest.onHeadersReceived.addListener(
     ['blocking', 'responseHeaders']
 );
 
-// Listen for messages from sidebar
+// Listen for messages from sidebar (kept for compatibility, but no longer used)
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === 'openUrl') {
         // Open the URL in a new tab

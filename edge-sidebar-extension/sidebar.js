@@ -273,12 +273,10 @@ function openInNewTab(index) {
     if (index < 0 || index >= sites.length) return;
     
     const site = sites[index];
-    chrome.runtime.sendMessage({
-        action: 'openUrl',
-        url: site.url
-    }, (response) => {
+    // Directly open in new tab using chrome.tabs API
+    chrome.tabs.create({ url: site.url }, (newTab) => {
         if (chrome.runtime.lastError) {
-            console.error('Message send error:', chrome.runtime.lastError);
+            console.error('Failed to open tab:', chrome.runtime.lastError);
         }
     });
 }
