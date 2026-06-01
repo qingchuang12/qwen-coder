@@ -1,4 +1,4 @@
-// sidebar.js
+// sidebar.js for Edge (Manifest V2)
 let sites = [];
 let currentIndex = -1;
 
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Load the first site (or last visited)
     if (sites.length > 0) {
         // Try to get last visited site index
-        chrome.storage.sync.get(['lastVisitedIndex'], (result) => {
+        chrome.storage.local.get(['lastVisitedIndex'], (result) => {
             let idx = result.lastVisitedIndex;
             if (idx === undefined || idx < 0 || idx >= sites.length) {
                 idx = 0;
@@ -31,6 +31,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
         showError('No sites configured. Click "Manage" to add sites.');
     }
+
+    // Save last visited site when page unloads
+    window.addEventListener('beforeunload', () => {
+        if (currentIndex >= 0 && currentIndex < sites.length) {
+            chrome.storage.local.set({ lastVisitedIndex: currentIndex });
+        }
+    });
 });
 
 // Setup all event listeners
@@ -45,7 +52,7 @@ function setupEventListeners() {
                 currentIndex = idx;
                 loadSiteInIframe(currentIndex);
                 // Save last visited
-                chrome.storage.sync.set({ lastVisitedIndex: currentIndex });
+                chrome.storage.local.set({ lastVisitedIndex: currentIndex });
             }
         });
     }
@@ -106,7 +113,7 @@ function setupEventListeners() {
 // Load sites from storage
 async function loadSites() {
     return new Promise((resolve) => {
-        chrome.storage.sync.get(['sites'], (result) => {
+        chrome.storage.local.get(['sites'], (result) => {
             sites = result.sites || [
                 { name: 'DeepSeek Chat', url: 'https://chat.deepseek.com/' },
                 { name: 'Qwen Coder', url: 'https://coder.qwen.ai/' },
@@ -124,7 +131,7 @@ async function loadSites() {
 // Save sites to storage
 async function saveSites() {
     return new Promise((resolve) => {
-        chrome.storage.sync.set({ sites }, resolve);
+        chrome.storage.local.set({ sites }, resolve);
     });
 }
 
@@ -216,12 +223,7 @@ function loadSiteInIframe(index) {
     const loadingOverlay = document.getElementById('loadingOverlay');
     const errorState = document.getElementById('errorState');
     
-    // Show loading, hide error
-    loadingOverlay.classList.remove('hidden');
-    errorState.classList.remove('visible');
-    
-    // Set iframe src - use a direct approach
-    // First hide the iframe to prevent flash of content
+    // Hide iframe to prevent flash of content
     iframe.style.visibility = 'hidden';
     iframe.src = site.url;
     
@@ -235,9 +237,6 @@ function loadSiteInIframe(index) {
     iframe.onload = () => {
         loadingOverlay.classList.add('hidden');
         iframe.style.visibility = 'visible';
-        
-        // Don't try to access iframe content - this will fail for cross-origin
-        // The declarativeNetRequest rules should handle header removal
         console.log('Iframe loaded:', site.url);
     };
     

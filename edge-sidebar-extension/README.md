@@ -7,7 +7,7 @@
 - 🚀 **快速启动** - 点击扩展图标打开侧边栏，一键在新标签页中打开网站
 - 📋 **卡片管理** - 所有网站以精美卡片形式展示，一目了然
 - ➕ **自定义管理** - 随时添加、编辑、删除任意网站
-- 💾 **自动同步** - 数据通过 Chrome Storage Sync 自动同步
+- 💾 **本地存储** - 数据通过 Chrome Storage Local 本地存储
 - 🎨 **精美界面** - 现代化的卡片式设计，每个卡片都有独立的操作按钮
 - 🔒 **新标签打开** - 所有网站在新标签页中打开，避免 iframe 限制
 
@@ -15,6 +15,11 @@
 
 - DeepSeek Chat (https://chat.deepseek.com/)
 - Qwen Coder (https://coder.qwen.ai/)
+- Qwen Chat (https://chat.qwen.ai/)
+- Kimi (https://www.kimi.com/)
+- Grok (https://grok.com)
+- GitHub Copilot (https://github.com/copilot)
+- Microsoft Copilot (https://copilot.microsoft.com/)
 
 ## 安装方法
 
@@ -28,33 +33,41 @@
 
 ### 打开侧边栏
 - 点击浏览器工具栏中的扩展图标
+- 或在任意网页右键点击，选择"Open AI Chat Sidebar"
 
 ### 查看网站列表
 - 侧边栏显示所有已添加的网站卡片
 - 每个卡片显示网站名称、URL 和操作按钮
 
 ### 打开网站
-每个网站卡片提供两个打开选项：
-- **👁️ 查看** - 在新标签页中查看网站
-- **🚀 新标签页** - 在新标签页中打开网站
+每个网站卡片提供两个操作选项：
+- **🚀 New Tab** - 在新标签页中打开网站
+- **⚙️ Manage** - 打开管理面板，管理网站列表
 
 ### 管理网站
 
 #### 添加网站
-1. 点击底部的"➕ Add New Site"按钮
-2. 输入网站名称和 URL
-3. 点击"保存"
+1. 点击顶部的"⚙️ Manage"按钮
+2. 点击底部的"➕ Add New Site"按钮
+3. 输入网站名称和 URL
+4. 点击"保存"
 
 #### 编辑网站
-1. 点击网站卡片上的"✏️ 编辑"按钮
-2. 修改名称或 URL
-3. 点击"保存"
+1. 在管理面板中找到要编辑的网站
+2. 点击网站卡片上的"✏️"编辑按钮
+3. 修改名称或 URL
+4. 点击"保存"
 
 #### 删除网站
-1. 点击网站卡片上的"🗑️ 删除"按钮
-2. 确认删除
+1. 在管理面板中找到要删除的网站
+2. 点击网站卡片上的"🗑️"删除按钮
+3. 确认删除
 
 ## 技术说明
+
+### Manifest V2
+
+本扩展使用 Manifest V2 规范，兼容 Edge 浏览器的 sidebar_action API。
 
 ### 为什么网站在新标签页打开？
 
@@ -62,27 +75,35 @@
 
 因此，本扩展采用在新标签页中打开网站的方式，确保所有网站都能正常访问。
 
+### webRequest API
+
+本扩展使用 `webRequest` 和 `webRequestBlocking` 权限来移除响应头中的 `X-Frame-Options` 和 `Content-Security-Policy`，以便部分网站可以在 iframe 中正常显示。
+
 ### 权限说明
 
-- `sidePanel` - 显示侧边栏面板
+- `browser_action` - 工具栏图标和点击事件
+- `sidebar_action` - 侧边栏面板显示
 - `storage` - 存储用户配置的网站列表
 - `tabs` - 在新标签页中打开网站
 - `notifications` - 显示错误通知
 - `contextMenus` - 右键菜单支持
+- `webRequest` / `webRequestBlocking` - 修改响应头以允许 iframe 嵌入
 
 ## 文件结构
 
 ```
 edge-sidebar-extension/
-├── manifest.json      # 扩展配置文件
-├── background.js      # 后台脚本，处理侧边栏打开和 URL 跳转
+├── manifest.json      # 扩展配置文件 (Manifest V2)
+├── background.js      # 后台脚本，处理侧边栏和 webRequest
 ├── sidebar.html       # 侧边栏 UI 界面
 ├── sidebar.js         # 侧边栏逻辑
-├── icons/             # 扩展图标
-│   ├── icon16.svg
-│   ├── icon48.svg
-│   └── icon128.svg
 └── README.md          # 说明文档
+
+common/
+└── icons/             # 公共图标文件夹（与 Firefox 扩展共享）
+    ├── icon16.svg
+    ├── icon48.svg
+    └── icon128.svg
 ```
 
 ## 开发调试
@@ -90,6 +111,17 @@ edge-sidebar-extension/
 1. 在 `edge://extensions/` 页面找到已加载的扩展
 2. 点击"检查视图 - background page"打开开发者工具
 3. 查看控制台中的日志输出
+
+## 与 Firefox 版本的区别
+
+| 特性 | Edge 版本 | Firefox 版本 |
+|------|-----------|--------------|
+| Manifest 版本 | V2 | V2 |
+| API 命名空间 | chrome.* | browser.* |
+| 存储 API | chrome.storage.local | browser.storage.local |
+| 侧边栏 API | sidebar_action | sidebar_action |
+| 图标路径 | ../common/icons/ | icons/ |
+| 背景脚本 | 持久化背景页 | 持久化背景页 |
 
 ## 许可证
 

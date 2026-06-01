@@ -1,4 +1,20 @@
-// Background service worker for the extension
+// Background script for the Edge extension (Manifest V2)
+
+// Headers to remove for iframe embedding
+const headersToRemove = [
+    'x-frame-options',
+    'content-security-policy',
+    'x-content-security-policy',
+    'x-webkit-csp'
+];
+
+// Handle toolbar button click - toggle sidebar
+chrome.browserAction.onClicked.addListener(() => {
+    // For Edge Manifest V2, we use sidebarAction if available
+    if (chrome.sidebarAction) {
+        chrome.sidebarAction.toggle();
+    }
+});
 
 // Set up context menu for opening sidebar
 chrome.runtime.onInstalled.addListener(() => {
@@ -8,48 +24,75 @@ chrome.runtime.onInstalled.addListener(() => {
         title: 'Open AI Chat Sidebar',
         contexts: ['page']
     });
-
-    // Set default side panel behavior - keep panel open when enabled
-    if (chrome.sidePanel && chrome.sidePanel.setPanelBehavior) {
-        chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
-    }
 });
 
 // Handle context menu clicks
 chrome.contextMenus.onClicked.addListener((info, tab) => {
     if (info.menuItemId === 'openSidebar') {
-        openSidePanel(tab.id);
+        if (chrome.sidebarAction) {
+            chrome.sidebarAction.open();
+        }
     }
 });
 
-// Handle action button click - this is a user gesture
-chrome.action.onClicked.addListener(async (tab) => {
-    await openSidePanel(tab.id);
-});
-
-// Function to open side panel - called in response to user gesture
-async function openSidePanel(tabId) {
-    try {
-        // Ensure side panel is enabled with correct path
-        await chrome.sidePanel.setOptions({
-            path: 'sidebar.html',
-            enabled: true
+// Use webRequest API to modify response headers and allow iframe embedding
+// This is needed for both Edge MV2 and Firefox
+chrome.webRequest.onHeadersReceived.addListener(
+    (details) => {
+        const modifiedHeaders = details.responseHeaders.filter(header => {
+            const headerName = header.name.toLowerCase();
+            return !headersToRemove.includes(headerName);
         });
+        
+        return { responseHeaders: modifiedHeaders };
+    },
+    {
+        urls: ['<all_urls>'],
+        types: ['sub_frame']
+    },
+    ['blocking', 'responseHeaders']
+);
 
-        // This call must be in direct response to user gesture
-        // The action.onClicked listener provides this context
-        await chrome.sidePanel.open({ tabId: tabId });
-    } catch (error) {
-        console.error('Error opening side panel:', error);
-        // Fallback: show notification to user
-        chrome.notifications?.create({
-            type: 'basic',
-            iconUrl: 'icons/icon48.svg',
-            title: 'AI Chat Sidebar',
-            message: 'Please click the extension icon again to open the sidebar.'
+// Additional rule for specific AI chat domains (main_frame and sub_frame)
+chrome.webRequest.onHeadersReceived.addListener(
+    (details) => {
+        const modifiedHeaders = details.responseHeaders.filter(header => {
+            const headerName = header.name.toLowerCase();
+            return !headersToRemove.includes(headerName);
         });
-    }
-}
+        
+        return { responseHeaders: modifiedHeaders };
+    },
+    {
+        urls: [
+            '*://*.deepseek.com/*',
+            '*://*.grok.com/*',
+            '*://*.x.com/*',
+            '*://*.twitter.com/*',
+            '*://*.openai.com/*',
+            '*://*.anthropic.com/*',
+            '*://*.google.com/*',
+            '*://*.claude.ai/*',
+            '*://*.qwen.ai/*',
+            '*://*.aliyun.com/*',
+            '*://*.tencent.com/*',
+            '*://*.baidu.com/*',
+            '*://*.kimi.com/*',
+            '*://github.com/*',
+            '*://chatgpt.com/*',
+            '*://poe.com/*',
+            '*://perplexity.ai/*',
+            '*://copilot.microsoft.com/*',
+            '*://gemini.google.com/*',
+            '*://bard.google.com/*',
+            '*://huggingface.co/*',
+            '*://mistral.ai/*',
+            '*://cohere.com/*'
+        ],
+        types: ['main_frame', 'sub_frame']
+    },
+    ['blocking', 'responseHeaders']
+);
 
 // Listen for messages from sidebar
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
