@@ -16,7 +16,44 @@
         {
           "header": "content-security-policy",
           "operation": "remove"
-        },
+        }
+      ]
+    },
+    "condition": {
+      "urlFilter": "*",
+      "resourceTypes": ["sub_frame"],
+      "requestDomains": [
+        "chat.deepseek.com",
+        "coder.qwen.ai", 
+        "chat.qwen.ai",
+        "www.kimi.com",
+        "grok.com",
+        "github.com",
+        "chatgpt.com",
+        "claude.ai",
+        "poe.com",
+        "perplexity.ai",
+        "copilot.microsoft.com",
+        "gemini.google.com",
+        "bard.google.com",
+        "huggingface.co",
+        "mistral.ai",
+        "cohere.com",
+        "character.ai",
+        "you.com",
+        "phind.com",
+        "writer.com",
+        "jasper.ai",
+        "notion.so"
+      ]
+    }
+  },
+  {
+    "id": 2,
+    "priority": 2,
+    "action": {
+      "type": "modifyHeaders",
+      "responseHeaders": [
         {
           "header": "X-Content-Security-Policy",
           "operation": "remove"
@@ -45,355 +82,142 @@
     },
     "condition": {
       "urlFilter": "*",
-      "resourceTypes": ["sub_frame"]
-    }
-  },
-  {
-    "id": 2,
-    "priority": 10,
-    "action": {
-      "type": "modifyHeaders",
-      "responseHeaders": [
-        {
-          "header": "X-Frame-Options",
-          "operation": "remove"
-        },
-        {
-          "header": "Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "x-content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "WebKit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "webkit-csp",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Webkit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "x-webkit-csp",
-          "operation": "remove"
-        }
+      "resourceTypes": ["sub_frame"],
+      "requestDomains": [
+        "chat.deepseek.com",
+        "coder.qwen.ai", 
+        "chat.qwen.ai",
+        "www.kimi.com",
+        "grok.com",
+        "github.com",
+        "chatgpt.com",
+        "claude.ai",
+        "poe.com",
+        "perplexity.ai",
+        "copilot.microsoft.com",
+        "gemini.google.com",
+        "bard.google.com",
+        "huggingface.co",
+        "mistral.ai",
+        "cohere.com",
+        "character.ai",
+        "you.com",
+        "phind.com",
+        "writer.com",
+        "jasper.ai",
+        "notion.so"
       ]
-    },
-    "condition": {
-      "regexFilter": ".*\\.(deepseek|grok|x|twitter|openai|anthropic|google|claude|qwen|aliyun|tencent|baidu|kimi)\\.com.*|.*github\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
     }
   },
   {
     "id": 3,
-    "priority": 10,
+    "priority": 3,
     "action": {
       "type": "modifyHeaders",
       "responseHeaders": [
         {
-          "header": "X-Frame-Options",
+          "header": "X-Content-Type-Options",
           "operation": "remove"
         },
         {
-          "header": "Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "x-content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "WebKit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "webkit-csp",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Webkit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "x-webkit-csp",
+          "header": "x-content-type-options",
           "operation": "remove"
         }
       ]
     },
     "condition": {
-      "regexFilter": ".*chat\\.deepseek\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "urlFilter": "*",
+      "resourceTypes": ["sub_frame"],
+      "requestDomains": [
+        "chat.deepseek.com",
+        "coder.qwen.ai", 
+        "chat.qwen.ai",
+        "www.kimi.com",
+        "grok.com",
+        "github.com",
+        "chatgpt.com",
+        "claude.ai",
+        "poe.com",
+        "perplexity.ai",
+        "copilot.microsoft.com",
+        "gemini.google.com",
+        "bard.google.com",
+        "huggingface.co",
+        "mistral.ai",
+        "cohere.com",
+        "character.ai",
+        "you.com",
+        "phind.com",
+        "writer.com",
+        "jasper.ai",
+        "notion.so"
+      ]
     }
   },
   {
     "id": 4,
-    "priority": 10,
+    "priority": 4,
     "action": {
       "type": "modifyHeaders",
       "responseHeaders": [
         {
-          "header": "X-Frame-Options",
+          "header": "Cross-Origin-Embedder-Policy",
           "operation": "remove"
         },
         {
-          "header": "Content-Security-Policy",
+          "header": "cross-origin-embedder-policy",
           "operation": "remove"
         },
         {
-          "header": "content-security-policy",
+          "header": "Cross-Origin-Resource-Policy",
           "operation": "remove"
         },
         {
-          "header": "X-Content-Security-Policy",
+          "header": "cross-origin-resource-policy",
           "operation": "remove"
         },
         {
-          "header": "x-content-security-policy",
+          "header": "Cross-Origin-Opener-Policy",
           "operation": "remove"
         },
         {
-          "header": "WebKit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "webkit-csp",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Webkit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "x-webkit-csp",
+          "header": "cross-origin-opener-policy",
           "operation": "remove"
         }
       ]
     },
     "condition": {
-      "regexFilter": ".*grok\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
-    }
-  },
-  {
-    "id": 5,
-    "priority": 10,
-    "action": {
-      "type": "modifyHeaders",
-      "responseHeaders": [
-        {
-          "header": "X-Frame-Options",
-          "operation": "remove"
-        },
-        {
-          "header": "Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "x-content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "WebKit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "webkit-csp",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Webkit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "x-webkit-csp",
-          "operation": "remove"
-        }
+      "urlFilter": "*",
+      "resourceTypes": ["sub_frame"],
+      "requestDomains": [
+        "chat.deepseek.com",
+        "coder.qwen.ai", 
+        "chat.qwen.ai",
+        "www.kimi.com",
+        "grok.com",
+        "github.com",
+        "chatgpt.com",
+        "claude.ai",
+        "poe.com",
+        "perplexity.ai",
+        "copilot.microsoft.com",
+        "gemini.google.com",
+        "bard.google.com",
+        "huggingface.co",
+        "mistral.ai",
+        "cohere.com",
+        "character.ai",
+        "you.com",
+        "phind.com",
+        "writer.com",
+        "jasper.ai",
+        "notion.so"
       ]
-    },
-    "condition": {
-      "regexFilter": ".*chatgpt\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
-    }
-  },
-  {
-    "id": 6,
-    "priority": 10,
-    "action": {
-      "type": "modifyHeaders",
-      "responseHeaders": [
-        {
-          "header": "X-Frame-Options",
-          "operation": "remove"
-        },
-        {
-          "header": "Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "x-content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "WebKit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "webkit-csp",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Webkit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "x-webkit-csp",
-          "operation": "remove"
-        }
-      ]
-    },
-    "condition": {
-      "regexFilter": ".*claude\\.ai.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
-    }
-  },
-  {
-    "id": 7,
-    "priority": 10,
-    "action": {
-      "type": "modifyHeaders",
-      "responseHeaders": [
-        {
-          "header": "X-Frame-Options",
-          "operation": "remove"
-        },
-        {
-          "header": "Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "x-content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "WebKit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "webkit-csp",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Webkit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "x-webkit-csp",
-          "operation": "remove"
-        }
-      ]
-    },
-    "condition": {
-      "regexFilter": ".*poe\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
-    }
-  },
-  {
-    "id": 8,
-    "priority": 10,
-    "action": {
-      "type": "modifyHeaders",
-      "responseHeaders": [
-        {
-          "header": "X-Frame-Options",
-          "operation": "remove"
-        },
-        {
-          "header": "Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "x-content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "WebKit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "webkit-csp",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Webkit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "x-webkit-csp",
-          "operation": "remove"
-        }
-      ]
-    },
-    "condition": {
-      "regexFilter": ".*perplexity\\.ai.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
     }
   },
   {
     "id": 9,
-    "priority": 10,
+    "priority": 1000,
     "action": {
       "type": "modifyHeaders",
       "responseHeaders": [
@@ -432,17 +256,49 @@
         {
           "header": "x-webkit-csp",
           "operation": "remove"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "operation": "remove"
+        },
+        {
+          "header": "x-content-type-options",
+          "operation": "remove"
+        },
+        {
+          "header": "Cross-Origin-Embedder-Policy",
+          "operation": "remove"
+        },
+        {
+          "header": "cross-origin-embedder-policy",
+          "operation": "remove"
+        },
+        {
+          "header": "Cross-Origin-Resource-Policy",
+          "operation": "remove"
+        },
+        {
+          "header": "cross-origin-resource-policy",
+          "operation": "remove"
+        },
+        {
+          "header": "Cross-Origin-Opener-Policy",
+          "operation": "remove"
+        },
+        {
+          "header": "cross-origin-opener-policy",
+          "operation": "remove"
         }
       ]
     },
     "condition": {
-      "regexFilter": ".*copilot\\.microsoft\\.com.*",
+      "regexFilter": "^https?:\\/\\/(?:[^\\/]+\\.)*copilot\\.microsoft\\.com(?:\\/.*)?$",
       "resourceTypes": ["main_frame", "sub_frame"]
     }
   },
   {
-    "id": 10,
-    "priority": 10,
+    "id": 21,
+    "priority": 1000,
     "action": {
       "type": "modifyHeaders",
       "responseHeaders": [
@@ -481,501 +337,61 @@
         {
           "header": "x-webkit-csp",
           "operation": "remove"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "operation": "remove"
+        },
+        {
+          "header": "x-content-type-options",
+          "operation": "remove"
+        },
+        {
+          "header": "Cross-Origin-Embedder-Policy",
+          "operation": "remove"
+        },
+        {
+          "header": "cross-origin-embedder-policy",
+          "operation": "remove"
+        },
+        {
+          "header": "Cross-Origin-Resource-Policy",
+          "operation": "remove"
+        },
+        {
+          "header": "cross-origin-resource-policy",
+          "operation": "remove"
+        },
+        {
+          "header": "Cross-Origin-Opener-Policy",
+          "operation": "remove"
+        },
+        {
+          "header": "cross-origin-opener-policy",
+          "operation": "remove"
         }
       ]
     },
     "condition": {
-      "regexFilter": ".*gemini\\.google\\.com.*",
+      "regexFilter": "^https?:\\/\\/copilot\\.microsoft\\.com(?:\\/.*)?$",
       "resourceTypes": ["main_frame", "sub_frame"]
     }
   },
   {
-    "id": 11,
-    "priority": 10,
+    "id": 22,
+    "priority": 1001,
     "action": {
-      "type": "modifyHeaders",
-      "responseHeaders": [
-        {
-          "header": "X-Frame-Options",
-          "operation": "remove"
-        },
-        {
-          "header": "Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "x-content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "WebKit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "webkit-csp",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Webkit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "x-webkit-csp",
-          "operation": "remove"
+      "type": "redirect",
+      "redirect": {
+        "transform": {
+          "queryTransform": {
+            "remove": ["__cf_chl_f_tk"]
+          }
         }
-      ]
+      }
     },
     "condition": {
-      "regexFilter": ".*bard\\.google\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
-    }
-  },
-  {
-    "id": 12,
-    "priority": 10,
-    "action": {
-      "type": "modifyHeaders",
-      "responseHeaders": [
-        {
-          "header": "X-Frame-Options",
-          "operation": "remove"
-        },
-        {
-          "header": "Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "x-content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "WebKit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "webkit-csp",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Webkit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "x-webkit-csp",
-          "operation": "remove"
-        }
-      ]
-    },
-    "condition": {
-      "regexFilter": ".*huggingface\\.co.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
-    }
-  },
-  {
-    "id": 13,
-    "priority": 10,
-    "action": {
-      "type": "modifyHeaders",
-      "responseHeaders": [
-        {
-          "header": "X-Frame-Options",
-          "operation": "remove"
-        },
-        {
-          "header": "Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "x-content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "WebKit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "webkit-csp",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Webkit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "x-webkit-csp",
-          "operation": "remove"
-        }
-      ]
-    },
-    "condition": {
-      "regexFilter": ".*mistral\\.ai.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
-    }
-  },
-  {
-    "id": 14,
-    "priority": 10,
-    "action": {
-      "type": "modifyHeaders",
-      "responseHeaders": [
-        {
-          "header": "X-Frame-Options",
-          "operation": "remove"
-        },
-        {
-          "header": "Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "x-content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "WebKit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "webkit-csp",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Webkit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "x-webkit-csp",
-          "operation": "remove"
-        }
-      ]
-    },
-    "condition": {
-      "regexFilter": ".*cohere\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
-    }
-  },
-  {
-    "id": 15,
-    "priority": 10,
-    "action": {
-      "type": "modifyHeaders",
-      "responseHeaders": [
-        {
-          "header": "X-Frame-Options",
-          "operation": "remove"
-        },
-        {
-          "header": "Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "x-content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "WebKit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "webkit-csp",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Webkit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "x-webkit-csp",
-          "operation": "remove"
-        }
-      ]
-    },
-    "condition": {
-      "regexFilter": ".*character\\.ai.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
-    }
-  },
-  {
-    "id": 16,
-    "priority": 10,
-    "action": {
-      "type": "modifyHeaders",
-      "responseHeaders": [
-        {
-          "header": "X-Frame-Options",
-          "operation": "remove"
-        },
-        {
-          "header": "Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "x-content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "WebKit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "webkit-csp",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Webkit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "x-webkit-csp",
-          "operation": "remove"
-        }
-      ]
-    },
-    "condition": {
-      "regexFilter": ".*you\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
-    }
-  },
-  {
-    "id": 17,
-    "priority": 10,
-    "action": {
-      "type": "modifyHeaders",
-      "responseHeaders": [
-        {
-          "header": "X-Frame-Options",
-          "operation": "remove"
-        },
-        {
-          "header": "Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "x-content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "WebKit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "webkit-csp",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Webkit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "x-webkit-csp",
-          "operation": "remove"
-        }
-      ]
-    },
-    "condition": {
-      "regexFilter": ".*phind\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
-    }
-  },
-  {
-    "id": 18,
-    "priority": 10,
-    "action": {
-      "type": "modifyHeaders",
-      "responseHeaders": [
-        {
-          "header": "X-Frame-Options",
-          "operation": "remove"
-        },
-        {
-          "header": "Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "x-content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "WebKit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "webkit-csp",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Webkit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "x-webkit-csp",
-          "operation": "remove"
-        }
-      ]
-    },
-    "condition": {
-      "regexFilter": ".*writer\\.com.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
-    }
-  },
-  {
-    "id": 19,
-    "priority": 10,
-    "action": {
-      "type": "modifyHeaders",
-      "responseHeaders": [
-        {
-          "header": "X-Frame-Options",
-          "operation": "remove"
-        },
-        {
-          "header": "Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "x-content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "WebKit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "webkit-csp",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Webkit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "x-webkit-csp",
-          "operation": "remove"
-        }
-      ]
-    },
-    "condition": {
-      "regexFilter": ".*jasper\\.ai.*",
-      "resourceTypes": ["main_frame", "sub_frame"]
-    }
-  },
-  {
-    "id": 20,
-    "priority": 10,
-    "action": {
-      "type": "modifyHeaders",
-      "responseHeaders": [
-        {
-          "header": "X-Frame-Options",
-          "operation": "remove"
-        },
-        {
-          "header": "Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Content-Security-Policy",
-          "operation": "remove"
-        },
-        {
-          "header": "x-content-security-policy",
-          "operation": "remove"
-        },
-        {
-          "header": "WebKit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "webkit-csp",
-          "operation": "remove"
-        },
-        {
-          "header": "X-Webkit-CSP",
-          "operation": "remove"
-        },
-        {
-          "header": "x-webkit-csp",
-          "operation": "remove"
-        }
-      ]
-    },
-    "condition": {
-      "regexFilter": ".*notion\\.so.*",
+      "regexFilter": "^https?:\\/\\/copilot\\.microsoft\\.com(?:\\/.*)?$",
       "resourceTypes": ["main_frame", "sub_frame"]
     }
   }

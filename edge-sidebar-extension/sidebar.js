@@ -83,6 +83,7 @@ function setupEventListeners() {
     // Open external button (when iframe blocked)
     const btnOpenExternal = document.getElementById('btnOpenExternal');
     if (btnOpenExternal) {
+        btnOpenExternal.style.display = 'none';  // Initially hidden
         btnOpenExternal.addEventListener('click', () => {
             if (currentIndex >= 0 && currentIndex < sites.length) {
                 openInNewTab(currentIndex);
@@ -212,6 +213,17 @@ function loadSiteInIframe(index) {
     if (index < 0 || index >= sites.length) return;
     
     const site = sites[index];
+    
+    // Special handling for copilot.microsoft.com due to strict security policies
+    if (site.url.includes('copilot.microsoft.com')) {
+        showError('Microsoft Copilot has security restrictions that prevent embedding in iframes. Click the button below to open in a new tab.');
+        const btnOpenExternal = document.getElementById('btnOpenExternal');
+        btnOpenExternal.style.display = 'block';
+        // Update button text to be more specific
+        btnOpenExternal.innerHTML = '🔗 Open Copilot in New Tab';
+        return;
+    }
+    
     const iframe = document.getElementById('siteIframe');
     const loadingOverlay = document.getElementById('loadingOverlay');
     const errorState = document.getElementById('errorState');
