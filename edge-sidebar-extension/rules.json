@@ -459,7 +459,7 @@
       ]
     },
     "condition": {
-      "regexFilter": ".*microsoft\\.com.*|.*microsoftonline\\.com.*|.*msftauth\\.com.*|.*msftconnecttest\\.com.*",
+      "regexFilter": ".*copilot.*microsoft.*|.*microsoft\\.com.*|.*microsoftonline\\.com.*|.*msftauth\\.net.*|.*msftauth\\.com.*|.*live\\.com.*|.*azureedge\\.net.*|.*bing\\.com.*",
       "resourceTypes": [
         "main_frame",
         "sub_frame"
