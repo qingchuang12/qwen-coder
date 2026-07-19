@@ -95,7 +95,7 @@
       ]
     },
     "condition": {
-      "regexFilter": ".*\\.(deepseek|grok|x|twitter|openai|anthropic|google|claude|qwen|aliyun|tencent|baidu|kimi)\\.com.*|.*github\\.com.*",
+      "regexFilter": "https?://[^/]*(deepseek|grok|x|twitter|openai|anthropic|google|claude|qwen|aliyun|tencent|baidu|kimi)\\.[^/]*.*|https?://[^/]*github\\.[^/]*.*|https?://[^/]*copilot\\.microsoft\\.[^/]*.*|https?://[^/]*chatgpt\\.[^/]*.*|https?://[^/]*poe\\.[^/]*.*|https?://[^/]*perplexity\\.[^/]*.*|https?://[^/]*gemini\\.google\\.[^/]*.*|https?://[^/]*bard\\.google\\.[^/]*.*|https?://[^/]*huggingface\\.[^/]*.*|https?://[^/]*mistral\\.[^/]*.*|https?://[^/]*cohere\\.[^/]*.*",
       "resourceTypes": [
         "main_frame",
         "sub_frame"
@@ -459,7 +459,7 @@
       ]
     },
     "condition": {
-      "regexFilter": ".*copilot.*microsoft.*|.*microsoft\\.com.*|.*microsoftonline\\.com.*|.*msftauth\\.net.*|.*msftauth\\.com.*|.*live\\.com.*|.*azureedge\\.net.*|.*bing\\.com.*",
+      "regexFilter": "https?://[^/]*copilot\\.microsoft\\.com[^/]*.*|https?://[^/]*microsoft\\.com[^/]*.*|https?://[^/]*microsoftonline\\.com[^/]*.*|https?://[^/]*msftauth\\.net[^/]*.*|https?://[^/]*msftauth\\.com[^/]*.*|https?://[^/]*live\\.com[^/]*.*|https?://[^/]*azureedge\\.net[^/]*.*|https?://[^/]*bing\\.com[^/]*.*",
       "resourceTypes": [
         "main_frame",
         "sub_frame"
